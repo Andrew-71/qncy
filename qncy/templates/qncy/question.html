@@ -1,0 +1,10 @@
+
+{% extends "qncy/base.html" %}
+
+{% block title %}{{ question.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ question.title }}</h1>
+
+<p>{{ question.content }}</p>
+{% endblock %}
