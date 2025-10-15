@@ -1,0 +1,40 @@
+{% extends "qncy/base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="questions-heading">
+    <h1>New questions</h1>
+    <a href="#">trending questions</a>
+</div>
+
+{% if page_obj %}
+    {% for question in page_obj %}
+        <div class="question_card">
+            <h2 class="question_title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
+            <p>{{ question.content | truncatechars:200}}</p>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&pagesize={{ page_obj.paginator.per_page }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}
