@@ -107,6 +107,7 @@ a:hover, a:visited:hover {
     margin: 0;
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 .question-info > .question-title > a, .question-card > .question-title > a:visited {
     color: var(--black-lavender);
