@@ -10,9 +10,21 @@
 
 {% if page_obj %}
     {% for question in page_obj %}
-        <div class="question_card">
-            <h2 class="question_title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
-            <p>{{ question.content | truncatechars:200}}</p>
+        <div class="question-card">
+            <div class="question-score">
+                <img src="{{ question.author.pfp_url }}">
+                {{ question.rating }}
+            </div>
+            <div class="question-info">
+                <h2 class="question-title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
+                <p>{{ question.content | truncatechars:200}}</p>
+                <div class="question-footer">
+                    <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answers }})</a>
+                    {% if question.tags.count %}
+                    <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     {% endfor %}
 {% else %}

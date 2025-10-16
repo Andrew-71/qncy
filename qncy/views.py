@@ -39,7 +39,9 @@ def index(request):
     # NOTE: we *might* add different ways to sort eventually and this will
     # be likely decided here in another query parameter.
 
-    latest_question_list = Question.objects.order_by("-created_at")
+    latest_question_list = Question.objects.order_by("-created_at").annotate(
+        answers=Count('answer'),
+    )
     paginator = Paginator(latest_question_list, page_size)
     page_obj = paginator.get_page(page)
     context = {

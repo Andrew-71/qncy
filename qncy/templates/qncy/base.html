@@ -21,7 +21,10 @@
             </li>
             <li><a href="ask" class="ask">ask!</a></li>
             {% if user.is_authenticated %}
-            <li class="profile">{{ user.username }} <span><a href="#">settings</a> <a href="{% url 'qncy:logout' %}">log out</a></span></li>
+            <li class="profile-container">
+                {% if user.pfp_url %}<img src="{{ user.pfp_url }}">{% endif %}
+                <div class="profile">{{ user.username }} <span><a href="#">settings</a> <a href="{% url 'qncy:logout' %}">log out</a></span></div>
+            </li>
             {% else %}
             <li><a href="/login">log in</a></li>
             <li><a href="/register">register</a></li>
