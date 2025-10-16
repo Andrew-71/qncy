@@ -3,7 +3,7 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-<div class="questions-heading">
+<div class="heading">
     <h1>New questions</h1>
     <a href="#">trending questions</a>
 </div>
@@ -12,14 +12,15 @@
     {% for question in page_obj %}
         <div class="question-card">
             <div class="question-score">
-                <img src="{{ question.author.pfp_url }}">
+                <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
                 {{ question.rating }}
+                <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
             </div>
             <div class="question-info">
                 <h2 class="question-title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
                 <p>{{ question.content | truncatechars:200}}</p>
                 <div class="question-footer">
-                    <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answers }})</a>
+                    <span>Asked by <img src="{{ question.author.pfp_url }}"> {{ question.author.username }}. <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answers }})</a></span>
                     {% if question.tags.count %}
                     <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
                     {% endif %}
