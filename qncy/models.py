@@ -1,8 +1,11 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.forms import ModelForm
 
 # TODO User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
+    # models.ImageField(upload_to = "images/")
     pfp_url = models.URLField(blank=True)
 
 # Tag: ...tag
@@ -19,7 +22,7 @@ class Question(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(default=datetime.datetime.now)
     tags = models.ManyToManyField(Tag, blank=True)
     rating = models.IntegerField(default=0)
 
@@ -33,9 +36,15 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField()
-    accepted = models.BooleanField()
-    rating = models.IntegerField()
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    accepted = models.BooleanField(default=False)
+    rating = models.IntegerField(default=0)
     
     def __str__(self):
         return self.author.username + " - " + self.question.title
+
+class QuestionForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ["title", "content", "tags"]
+        

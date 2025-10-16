@@ -1,0 +1,33 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form > div {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+form label { width: 60px; }
+
+form input, form textarea {
+    width: 80%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+button {
+    text-transform: uppercase;
+    border-style: none;
+    color: var(--drizzle);
+    padding: 5px 20px;
+    border-radius: 5px;
+    background-color: var(--lavender);
+    max-width: 100px;
+}
+
+button:hover {
+    text-shadow: 0 0 4px var(--soft-lavender);
+    background-color: var(--black-lavender);
+}
