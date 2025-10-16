@@ -1,10 +1,48 @@
-
 {% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/question.css' %}">
+{% endblock %}
 
 {% block title %}{{ question.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ question.title }}</h1>
+<h1 class="heading">{{ question.title }}</h1>
 
-<p>{{ question.content }}</p>
+<div class="question-card">
+    <div class="question-score">
+        <img src="{{ question.author.pfp_url }}">
+        {{ question.rating }}
+    </div>
+    <div class="question-info">
+        <p>{{ question.content }}</p>
+        <div class="question-footer">
+            {% if question.tags.count %}
+                <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<h2>Answers: {{ question.answers }}</h2>
+
+{% if page_obj %}
+    {% for answer in page_obj %}
+        <div class="question-card">
+            <div class="question-score">
+                <img src="{{ answer.author.pfp_url }}">
+                {{ answer.rating }}
+            </div>
+            <div class="question-info">
+                <p>{{ answer.content }}</p>
+                <div class="question-footer">
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Be the first to answer!</p>
+{% endif %}
+
 {% endblock %}

@@ -20,7 +20,7 @@
                     <input placeholder="Search">
                 </form>
             </li>
-            <li><a href="ask" class="ask">ask!</a></li>
+            <li><a href="{% url 'qncy:ask' %}" class="ask">ask!</a></li>
             {% if user.is_authenticated %}
             <li class="profile-container">
                 {% if user.pfp_url %}<img src="{{ user.pfp_url }}">{% endif %}
