@@ -3,7 +3,23 @@ from django.contrib import admin
 from qncy.models import *
 from django.contrib.auth.admin import UserAdmin
 
-admin.site.register(User, UserAdmin)
+
+# Enormous crutch just to save profile pictures
+class CustomUserAdmin(UserAdmin):
+    fieldsets = tuple(
+        (fieldset[0], {
+            **{key: value for (key, value) in fieldset[1].items() if key != 'fields'},
+            'fields': fieldset[1]['fields'] + ('pfp_url',)
+        })
+        if fieldset[0] == 'Personal info'
+        else fieldset
+        for fieldset in UserAdmin.fieldsets
+    )
+    # fieldsets = UserAdmin.fieldsets + (
+    # (None, {'fields': ('pfp_url',)}),
+    # )
+
+admin.site.register(User, CustomUserAdmin)
 admin.site.register(Question)
 admin.site.register(Answer)
 admin.site.register(Tag)

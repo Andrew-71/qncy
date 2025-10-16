@@ -3,11 +3,14 @@ from django.contrib.auth.models import AbstractUser
 
 # TODO User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
-    pass
+    pfp_url = models.URLField(blank=True)
 
 # Tag: ...tag
 class Tag(models.Model):
     name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 # Question: title, content, author, creation date, tags, rating
 class Question(models.Model):
@@ -20,6 +23,9 @@ class Question(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
     rating = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.title
+
 # Answer: content, author, creation date, accepted flag, rating
 class Answer(models.Model):
     # NOTE: PROTECT may be better here:
@@ -30,3 +36,7 @@ class Answer(models.Model):
     created_at = models.DateTimeField()
     accepted = models.BooleanField()
     rating = models.IntegerField()
+    
+    def __str__(self):
+        return self.author.username + " - " + self.question.title
+
