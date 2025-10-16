@@ -1,15 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
 from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
-from qncy.models import Question, Tag, User
+from qncy.models import Question, Tag, User, QuestionForm
 
 from django.db.models import Count
 
 from django.contrib.auth import logout
-from django.shortcuts import redirect
+
+from vkhw import settings
 
 def common_context():
     top_tags = Tag.objects.annotate(
@@ -61,9 +62,21 @@ def tag(request, tag_name):
         tag = Tag.objects.get(name=tag_name)
     except Tag.DoesNotExist:
         raise Http404("Tag does not exist")
-    return tag.name
-    # return render(request, "qncy/question.html", {"question": question} | common_context())
+
+    return render(request, "qncy/question.html", {"question": question} | common_context())
 
 def logout_view(request):
     logout(request)
     return render(request, "qncy/logged_out.html", common_context())
+
+def ask(request):
+    if not request.user.is_authenticated:
+        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    
+    question = Question(author=request.user)
+    form = QuestionForm(request.POST or None, request.FILES or None, instance=question)
+    if form.is_valid():
+        form.author_id = request.user.id
+        form.save()
+        return redirect(f"question/{question.id}")
+    return render(request, "qncy/ask.html", {"form": form} | common_context())
