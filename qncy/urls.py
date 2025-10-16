@@ -11,7 +11,6 @@ urlpatterns = [
     path("question/<int:question_id>/", views.question, name="question"),
     path("tagged/<tag_name>/", views.tag, name="tagged"),
 
-    path("logout", views.logout_view, name="logout"),
-
-    path("login", auth_views.LoginView.as_view()),
+    path("logout", auth_views.LogoutView.as_view(), name="logout"),
+    path("login", auth_views.LoginView.as_view(), name="login"),
 ]

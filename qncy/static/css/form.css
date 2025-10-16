@@ -10,7 +10,7 @@ form > div {
     gap: 20px;
 }
 
-form label { width: 60px; }
+form label { width: 100px; }
 
 form input, form textarea {
     width: 80%;
