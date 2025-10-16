@@ -55,9 +55,10 @@ a:hover, a:visited:hover {
 
 .mainbar {
     flex-shrink: 100;
-    width: calc(100% - 280px);
+    width: calc(100% - 310px);
+    margin: 0 10px;
 }
-@media (max-width: 550px) {
+@media (max-width: 700px) {
     .mainbar {
         width: 100%;
     }
@@ -152,8 +153,9 @@ a:hover, a:visited:hover {
     border-color: var(--pour);
     background-color: var(--droplet);
 
-    padding: 5px;
-    margin-top: 10px;
+    /* padding: 5px; */
+    padding: 0 8px;
+    margin: 10px 10px 0px 10px;
 }
 
 footer {
@@ -239,11 +241,23 @@ header nav {
     margin: auto auto;
     max-width: 1100px;
 }
-header nav a, header nav a:visited {
+header nav a, header nav a:visited, header button {
     text-decoration: none;
 }
-header nav a:hover, header nav a:visited:hover {
+header nav a:hover, header nav a:visited:hover, header button:hover {
     text-decoration: underline;
+}
+header button {
+    color: var(--dark-lavender);
+    background-color: transparent;
+    border-style:hidden;
+    font-family: sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+}
+header button:hover {
+    color: var(--black-lavender);
+    cursor: pointer;
 }
 header ul li:has(> form) {
     flex-grow: 100;

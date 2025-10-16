@@ -24,7 +24,12 @@
             {% if user.is_authenticated %}
             <li class="profile-container">
                 {% if user.pfp_url %}<img src="{{ user.pfp_url }}">{% endif %}
-                <div class="profile">{{ user.username }} <span><a href="#">settings</a> <a href="{% url 'qncy:logout' %}">log out</a></span></div>
+                <div class="profile">{{ user.username }} <span><a href="#">settings</a>
+                <form method="post" action="{% url 'qncy:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">logout</button>
+                </form>
+            </span></div>
             </li>
             {% else %}
             <li><a href="/login">log in</a></li>
