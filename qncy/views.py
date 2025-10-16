@@ -1,16 +1,10 @@
 from django.shortcuts import render, redirect
-
-# Create your views here.
-
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
-from qncy.models import Question, Tag, User, QuestionForm, Answer
-
 from django.db.models import Count
 
-from django.contrib.auth import logout
-
-from vkhw import settings
+from qncy.models import Question, Tag, User, QuestionForm, Answer
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -71,17 +65,17 @@ def tag(request, tag_name):
         tag = Tag.objects.get(name=tag_name)
     except Tag.DoesNotExist:
         raise Http404("Tag does not exist")
+    tagged_questions_list = Question.objects.filter(tags=tag).order_by("-created_at").annotate(
+        answers=Count('answer'),
+    )
+    context = {
+        "tag": tag,
+        "page_obj": paginator_page(request, tagged_questions_list),
+    }
+    return render(request, "qncy/tagged.html", context | common_context())
 
-    return render(request, "qncy/question.html", {"question": question} | common_context())
-
-def logout_view(request):
-    logout(request)
-    return render(request, "qncy/logged_out.html", common_context())
-
+@login_required
 def ask(request):
-    if not request.user.is_authenticated:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
-    
     question = Question(author=request.user)
     form = QuestionForm(request.POST or None, request.FILES or None, instance=question)
     if form.is_valid():
