@@ -16,7 +16,7 @@
         <ul>
             <li><a href="/" class="logo">QNCY</a></li>
             <li>
-                <form role="search" id="search" action="/search">
+                <form role="search" id="search" class="search" action="/search">
                     <input placeholder="Search">
                 </form>
             </li>
@@ -27,7 +27,7 @@
                 <div class="profile">{{ user.username }} <span><a href="#">settings</a>
                 <form method="post" action="{% url 'qncy:logout' %}">
                     {% csrf_token %}
-                    <button type="submit">logout</button>
+                    <button class="logout-button" type="submit">logout</button>
                 </form>
             </span></div>
             </li>

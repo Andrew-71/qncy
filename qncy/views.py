@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
 from django.db.models import Count
 
-from qncy.models import Question, Tag, User, QuestionForm, Answer
+from qncy.models import Question, Tag, User, Answer
+from qncy.forms import QuestionForm, RegisterForm
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -83,3 +85,12 @@ def ask(request):
         form.save()
         return redirect(f"question/{question.id}")
     return render(request, "qncy/ask.html", {"form": form} | common_context())
+
+def register(request):
+    user = User()
+    form = RegisterForm(request.POST or None, request.FILES or None, instance=user)
+    if form.is_valid():
+        form.save()
+        login(request, user)
+        return redirect("/")
+    return render(request, "registration/register.html", {"form": form} | common_context())

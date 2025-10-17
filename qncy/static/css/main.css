@@ -240,23 +240,28 @@ header nav {
     margin: auto auto;
     max-width: 1100px;
 }
-header nav a, header nav a:visited, header button {
+header nav a, header nav a:visited, .logout-button {
     text-decoration: none;
 }
-header nav a:hover, header nav a:visited:hover, header button:hover {
+header nav a:hover, header nav a:visited:hover, .logout-button:hover {
     text-decoration: underline;
 }
-header button {
+.logout-button {
     color: var(--dark-lavender);
     background-color: transparent;
     border-style:hidden;
     font-family: sans-serif;
     font-weight: 600;
     font-size: 1em;
+    text-transform: inherit;
+    padding: inherit;
+    max-width: inherit;
 }
-header button:hover {
+.logout-button:hover {
     color: var(--black-lavender);
     cursor: pointer;
+    background-color: transparent;
+    text-shadow: inherit;
 }
 header ul li:has(> form) {
     flex-grow: 100;
@@ -266,8 +271,9 @@ header form {
     display: inline;
     width: fit-content;
 }
-header input {
+header .search input {
     width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 @media (max-width: 550px) {
     header form {
