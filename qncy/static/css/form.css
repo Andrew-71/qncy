@@ -1,23 +1,23 @@
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
 }
 
 form > div {
     display: flex;
-    flex-direction: row;
-    gap: 20px;
+    flex-direction: column;
+    gap: 5px;
 }
 
-form label { width: 100px; }
+form label { font-weight: bold;}
 
 form input, form textarea {
     width: 80%;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-button {
+form button {
     text-transform: uppercase;
     border-style: none;
     color: var(--drizzle);
@@ -27,7 +27,7 @@ button {
     max-width: 100px;
 }
 
-button:hover {
+form button:hover {
     text-shadow: 0 0 4px var(--soft-lavender);
     background-color: var(--black-lavender);
 }

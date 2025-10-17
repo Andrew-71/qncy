@@ -1,7 +1,6 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.forms import ModelForm
 
 # TODO User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
@@ -41,8 +40,3 @@ class Answer(models.Model):
     
     def __str__(self):
         return self.author.username + " - " + self.question.title
-
-class QuestionForm(ModelForm):
-    class Meta:
-        model = Question
-        fields = ["title", "content", "tags"]
