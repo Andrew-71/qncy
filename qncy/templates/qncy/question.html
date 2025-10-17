@@ -19,7 +19,7 @@
     <div class="question-info">
         <p>{{ question.content }}</p>
         <div class="question-footer">
-            <span>Asked by <img src="{{ question.author.pfp_url }}"> {{ question.author.username }} </span>
+            <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} {{ question.author.username }} </span>
             {% if question.tags.count %}
                 <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
             {% endif %}
@@ -40,7 +40,7 @@
             <div class="question-info">
                 <p>{{ answer.content }}</p>
                 <div class="question-footer">
-                    <span>Answer by <img src="{{ answer.author.pfp_url }}"> {{ question.author.username }}</span>
+                    <span>Answer by {% if answer.author.pfp %}<img src="{{ answer.author.pfp.url }}">{% endif %} {{ answer.author.username }}</span>
                 </div>
             </div>
         </div>

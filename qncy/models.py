@@ -5,8 +5,7 @@ from django.forms import ModelForm
 
 # TODO User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
-    # models.ImageField(upload_to = "images/")
-    pfp_url = models.URLField(blank=True)
+    pfp = models.ImageField(upload_to="profile/", blank=True)
 
 # Tag: ...tag
 class Tag(models.Model):
@@ -47,4 +46,3 @@ class QuestionForm(ModelForm):
     class Meta:
         model = Question
         fields = ["title", "content", "tags"]
-        

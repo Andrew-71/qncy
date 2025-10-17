@@ -23,7 +23,7 @@
             <li><a href="{% url 'qncy:ask' %}" class="ask">ask!</a></li>
             {% if user.is_authenticated %}
             <li class="profile-container">
-                {% if user.pfp_url %}<img src="{{ user.pfp_url }}">{% endif %}
+                {% if user.pfp %}<img src="{{ user.pfp.url }}">{% endif %}
                 <div class="profile">{{ user.username }} <span><a href="#">settings</a>
                 <form method="post" action="{% url 'qncy:logout' %}">
                     {% csrf_token %}
