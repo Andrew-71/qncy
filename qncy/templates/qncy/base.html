@@ -24,7 +24,7 @@
             {% if user.is_authenticated %}
             <li class="profile-container">
                 {% if user.pfp %}<img src="{{ user.pfp.url }}">{% endif %}
-                <div class="profile">{{ user.username }} <span><a href="#">settings</a>
+                <div class="profile">{{ user.username }} <span><a href="{% url 'qncy:settings' %}">settings</a>
                 <form method="post" action="{% url 'qncy:logout' %}">
                     {% csrf_token %}
                     <button class="logout-button" type="submit">logout</button>
@@ -60,7 +60,7 @@
                 <p>Best members</p>
                 <ul class="users">
                 {% for user in common.top_users %}
-                    <li><a href="/user/{{user.username}}">{{ user.username }}</a></li>
+                    <li><a href="#">{{ user.username }}</a></li>
                 {% endfor %}
                 </ul>
             {% else %}
