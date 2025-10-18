@@ -61,7 +61,7 @@ def question(request, question_id):
         "page_obj": paginator_page(request, answers_list),
     }
     
-    if request.user.is_authenticated and request.user != question.author:
+    if request.user.is_authenticated:
         answer = Answer(question=question,author=request.user)
         form = AnswerForm(request.POST or None, request.FILES or None, instance=answer)
         if form.is_valid():

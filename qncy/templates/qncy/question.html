@@ -52,7 +52,7 @@
     <p>Be the first to answer!</p>
 {% endif %}
 
-{% if user.is_authenticated and user != question.author %}
+{% if user.is_authenticated %}
 <form method="post">
   {% csrf_token %}
   {{ form }}
