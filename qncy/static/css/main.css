@@ -329,3 +329,7 @@ header hr {
     gap: 20px;
     margin-bottom: -10px; /* The expedition is getting desperate */
 }
+
+.accepted {
+    filter: brightness(0) saturate(100%) invert(50%) sepia(17%) saturate(4795%) hue-rotate(225deg) brightness(99%) contrast(93%);
+}
