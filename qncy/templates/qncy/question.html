@@ -55,8 +55,10 @@
     <p>Be the first to answer!</p>
 {% endif %}
 
+{% include "qncy/pagination.html" %} 
+
 {% if user.is_authenticated %}
-<form method="post">
+<form method="post" class="answer-form">
   {% csrf_token %}
   {{ form }}
   <button type="submit">Answer!</button>
