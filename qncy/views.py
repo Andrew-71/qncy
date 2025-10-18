@@ -55,13 +55,13 @@ def question(request, question_id):
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
     
-    answers_list = Answer.objects.filter(question=question).order_by("-rating")
+    answers_list = Answer.objects.filter(question=question).order_by("-accepted", "-rating")
     context = {
         "question": question,
         "page_obj": paginator_page(request, answers_list),
     }
     
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user != question.author:
         answer = Answer(question=question,author=request.user)
         form = AnswerForm(request.POST or None, request.FILES or None, instance=answer)
         if form.is_valid():
