@@ -10,7 +10,23 @@ form > div {
     gap: 5px;
 }
 
-form label { font-weight: bold;}
+.errorlist {
+    list-style: none;
+    color: var(--black-lavender);
+    padding: 0;
+    margin: 0;
+}
+
+.helptext {
+    color: var(--storm);
+}
+.helptext ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+form label { font-weight: bold; }
 
 form input, form textarea {
     width: 80%;
@@ -30,4 +46,32 @@ form button {
 form button:hover {
     text-shadow: 0 0 4px var(--soft-lavender);
     background-color: var(--black-lavender);
+    cursor: pointer;
+}
+
+input::file-selector-button {
+    border-style: none;
+    padding: 1px 4px;
+    border-radius: 2px;
+    background-color: var(--rain);
+    border-width: 1px;
+    border-color: var(--storm);
+    border-style: solid;
+}
+
+input::file-selector-button:hover {
+    background-color: var(--pour);
+    cursor: pointer;
+}
+
+/* If it's stupid and it works... */
+form > div:has(input[type=checkbox]) {
+    display: inline;
+    line-height: 150%;
+}
+input[type=checkbox] {
+    width: inherit;
+}
+form > div:has(input[type=checkbox]) > label:first-child {
+    display: block;
 }

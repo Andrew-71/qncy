@@ -7,7 +7,7 @@ from django.db.models import Count
 from django.http import HttpResponseRedirect
 
 from qncy.models import Question, Tag, User, Answer
-from qncy.forms import QuestionForm, RegisterForm, AnswerForm
+from qncy.forms import QuestionForm, RegisterForm, AnswerForm, SettingsForm
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -103,3 +103,11 @@ def register(request):
         login(request, user)
         return redirect("/")
     return render(request, "registration/register.html", {"form": form} | common_context())
+
+@login_required
+def settings(request):
+    form = SettingsForm(request.POST or None, request.FILES or None, instance=request.user)
+    if form.is_valid():
+        form.save()
+        return redirect("/")
+    return render(request, "registration/settings.html", {"form": form} | common_context())
