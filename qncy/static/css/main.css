@@ -64,86 +64,7 @@ a:hover, a:visited:hover {
     }
 }
 
-.question-card {
-    border-style: solid;
-    border-color: var(--pour);
-    border-top-style: none;
-    border-right-style: none;
-    border-left-style: none;
-    border-width: 2px;
-    margin: 10px;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    gap: 10px
-}
-.question-score {
-    padding-top: 0;
-    margin-top: 0;
-    display: flex;
-    flex-direction: column;
-    width: 50px;
-    align-items: center;
-    gap: 5px;
-}
-/* .question-score > img {
-    background-color: var(--soft-lavender);
-    border-radius: 5px;
-    height: 32px;
-    width: 32px;
-} */
-.question-score button {
-    border-radius: 1000px !important;
-    width: 32px;
-    height: 32px;
-    border-color: var(--pour);
-    border-style: solid;
-    background-color: var(--droplet);
-}
-.question-score button:hover {
-    background-color: var(--rain);
-}
-.question-info {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-.question-info > .question-title > a, .question-card > .question-title > a:visited {
-    color: var(--black-lavender);
-    text-decoration: none;
-}
-.question-info > .question-title > a:hover, .question-card > .question-title > a:visited:hover {
-    text-shadow: 0 0 10px var(--soft-lavender);
-}
-.question-title {
-    padding: 0;
-    margin: 0;
-    padding-bottom: 5px;
-}
-.question-info p {
-    padding-top: 0;
-    margin-top: 0;
-}
-.question-footer {
-    display: flex;
-    flex-direction: row;
-    /* gap: 10px; */
-    justify-content: space-between;
-}
-.question-footer img {
-    display: inline;
-    height: 16px;
-    width: 16px;
-    vertical-align: middle;
-    border-radius: 5px;
-    background-color: var(--soft-lavender);
-    border-style: none;
-}
 .sidebar {
-    /* float: right; */
-    /* min-width: 250px; */
     width: 250px;
    
     overflow-x:auto;
@@ -153,7 +74,6 @@ a:hover, a:visited:hover {
     border-color: var(--pour);
     background-color: var(--droplet);
 
-    /* padding: 5px; */
     padding: 0 8px;
     margin: 10px 10px 0px 10px;
 }
