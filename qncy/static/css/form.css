@@ -24,7 +24,7 @@ form button {
     padding: 5px 20px;
     border-radius: 5px;
     background-color: var(--lavender);
-    max-width: 100px;
+    max-width: 140px;
 }
 
 form button:hover {

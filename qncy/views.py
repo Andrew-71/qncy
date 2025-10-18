@@ -4,9 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, Http404
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.http import HttpResponseRedirect
 
 from qncy.models import Question, Tag, User, Answer
-from qncy.forms import QuestionForm, RegisterForm
+from qncy.forms import QuestionForm, RegisterForm, AnswerForm
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -53,12 +54,20 @@ def question(request, question_id):
         ).get(pk=question_id)
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
-
+    
     answers_list = Answer.objects.filter(question=question).order_by("-rating")
     context = {
         "question": question,
         "page_obj": paginator_page(request, answers_list),
     }
+    
+    if request.user.is_authenticated:
+        answer = Answer(question=question,author=request.user)
+        form = AnswerForm(request.POST or None, request.FILES or None, instance=answer)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(request.path_info)
+        context['form'] = form
 
     return render(request, "qncy/question.html", context | common_context())
 
