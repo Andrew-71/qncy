@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/question.css' %}">
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
 {% endblock %}
 
 {% block title %}{{ question.title }}{% endblock %}
@@ -47,6 +47,14 @@
     {% endfor %}
 {% else %}
     <p>Be the first to answer!</p>
+{% endif %}
+
+{% if user.is_authenticated %}
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Answer!</button>
+</form>
 {% endif %}
 
 {% endblock %}
