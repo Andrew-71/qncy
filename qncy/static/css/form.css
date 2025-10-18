@@ -75,3 +75,7 @@ input[type=checkbox] {
 form > div:has(input[type=checkbox]) > label:first-child {
     display: block;
 }
+
+.answer-form {
+    margin-top: 20px;
+}
