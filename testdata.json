@@ -1,0 +1,933 @@
+[
+  {
+    "model": "qncy.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$qzcrffinf4vmeroTp0Bsjs$UpgDxLFkx+xNRP2O7I+iFCe6NOgMaJJWbK37phFCSe8=",
+      "last_login": "2025-10-19T20:40:23.390Z",
+      "is_superuser": true,
+      "username": "demouser",
+      "first_name": "",
+      "last_name": "",
+      "email": "demo@example.com",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2025-10-19T18:06:43.321Z",
+      "pfp": "",
+      "rating": 4,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "qncy.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$a3eKpxyJty06U4x9SEwMpT$UMuegDJ0G9RUrz9QCBGx6ZYxAowlNs4Gqd+4gefFQ3Q=",
+      "last_login": "2025-10-19T20:27:54.299Z",
+      "is_superuser": false,
+      "username": "Ernst",
+      "first_name": "",
+      "last_name": "",
+      "email": "ernst@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-10-19T18:11:55.685Z",
+      "pfp": "",
+      "rating": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "qncy.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$ioTCQ063ltsEQ3A0Y9f1Ta$vwAFeqKBTChshvxtXed2WjNxkSkSA4/Wv9scdkExkNI=",
+      "last_login": "2025-10-19T20:11:06.107Z",
+      "is_superuser": false,
+      "username": "TobiasR",
+      "first_name": "",
+      "last_name": "",
+      "email": "tobby@a71.su",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-10-19T20:10:26.772Z",
+      "pfp": "",
+      "rating": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "qncy.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$WuFzLLK3IXOjjAWdwOvrf7$r8nmnygCNHo9Z6sZIa46wn/hi12VCrReO7L2Ipw1R5Y=",
+      "last_login": "2025-10-19T20:25:11.314Z",
+      "is_superuser": false,
+      "username": "BURNINGWITHHATE",
+      "first_name": "",
+      "last_name": "",
+      "email": "hate@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-10-19T20:25:11.153Z",
+      "pfp": "",
+      "rating": -3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "qncy.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$1000000$84G0FN12YyWq9hxgdSSNbv$zkglh8jwQo1HDElZClOtg7Ubmf6tW4gHqXbY5A6x3bA=",
+      "last_login": "2025-10-19T20:31:29.986Z",
+      "is_superuser": false,
+      "username": "Athena",
+      "first_name": "",
+      "last_name": "",
+      "email": "athena@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2025-10-19T20:31:29.799Z",
+      "pfp": "",
+      "rating": 3,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  { "model": "qncy.tag", "pk": 1, "fields": { "name": "shuttles" } },
+  { "model": "qncy.tag", "pk": 2, "fields": { "name": "hobbies" } },
+  { "model": "qncy.tag", "pk": 3, "fields": { "name": "meta" } },
+  { "model": "qncy.tag", "pk": 4, "fields": { "name": "software" } },
+  {
+    "model": "qncy.question",
+    "pk": 1,
+    "fields": {
+      "title": "Could a Space Shuttle go to the Moon?",
+      "content": "I know this is a strange question, but I recently played the game To the Moon, and while I loved it, a question has been plaguing me. In the game, the main goal is for a character to go the Moon (as the name implies), but in the end he does so in a Shuttle. Of course, that's not a problem because that happens in a simulation based on his memories, and a layperson may not know STS could only ever go to LEO... right? What if we *really* tried? Could it be possible?",
+      "author": 1,
+      "created_at": "2025-10-19T18:09:58.166Z",
+      "rating": 1,
+      "tags": [1, 2]
+    }
+  },
+  {
+    "model": "qncy.question",
+    "pk": 2,
+    "fields": {
+      "title": "What is your favourite fountain pen model?",
+      "content": "My first thought was the Lamy 2000, but truth be told I've never actually had one due to its price. So instead, I'd say Lamy Safari or TWSBI Eco due to their legendary status as beginner pens. Affordable, beautiful, and reliable. Just the way I like them.",
+      "author": 1,
+      "created_at": "2025-10-19T18:11:14.201Z",
+      "rating": 3,
+      "tags": [2]
+    }
+  },
+  {
+    "model": "qncy.question",
+    "pk": 3,
+    "fields": {
+      "title": "What skills do I need to get a job as a GN&C officer?",
+      "content": "I am on my 3rd year as Flight Control Software student at Eastport Technical University, and eyeing my career options. Ideally, I'd like to work in guidance-nav-control at LSA, but non-government institutes are also fine. What skills would I need for an assignment approval? I am taking all my major studies and have extra credit on TCS as a hobby. Would I need to take more physics? Robotics? Please tell me! Also eager to hear work experience from people employed in GN&C!",
+      "author": 2,
+      "created_at": "2025-10-19T20:09:26.608Z",
+      "rating": 0,
+      "tags": [1]
+    }
+  },
+  {
+    "model": "qncy.question",
+    "pk": 4,
+    "fields": {
+      "title": "What's the difference between a chatbot and a guy in a room pretending to be one?",
+      "content": "Thinking about https://qntm.org/differenc. What a horrifying story. Do you think you could tell?",
+      "author": 5,
+      "created_at": "2025-10-19T20:34:59Z",
+      "rating": 2,
+      "tags": [4]
+    }
+  },
+  {
+    "model": "qncy.question",
+    "pk": 5,
+    "fields": {
+      "title": "How do I check pagination on a forum with not enough posts?",
+      "content": "I'm developing a Q&A program, but hit a road block. I've been trying to use templates and \"real\" data from the start, but that means until I figure out how to write a pre-population script for data, I can't really check my pagination. What do I do?",
+      "author": 1,
+      "created_at": "2025-10-19T20:39:40Z",
+      "rating": 0,
+      "tags": [2, 3, 4]
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 1,
+    "fields": {
+      "question": 2,
+      "content": "The Jinhao Shark, duh",
+      "author": 2,
+      "created_at": "2025-10-19T18:12:19.852Z",
+      "accepted": false,
+      "rating": 3
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 2,
+    "fields": {
+      "question": 2,
+      "content": "Hm, the 2000 is a solid choice, but I'd have to go with the Kaweco Sport Piston. Yes, it's an expensive steel nib, but you get the adorable Sport size with a respectable ink capacity.",
+      "author": 3,
+      "created_at": "2025-10-19T20:12:13.511Z",
+      "accepted": true,
+      "rating": 2
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 3,
+    "fields": {
+      "question": 3,
+      "content": "Hey, I'm a Weather officer at LSA and sometimes work as NavCom for OLVs (most recently, OLV-1785-1), so while I'm not in your lane of work exactly, I have related experience.\r\n\r\nI believe you're overthinking it.\r\n\r\nIf you paid attention during your FCS studies, you'll have the skills. Most applied knowledge is received on the job when you're a Tertiary. The main obstacle to working at LSA is whether the conditions appeal to you. You'll have to live far from big cities (don't let Pineridge is a 2 hour drive away), the hours are brutal, and the pay isn't as high as you'd expect (still, probably on the higher end for our fields...). But it *is* rewarding. You'll do *real* science and *really* make an impact on our understanding of space.\r\n\r\nSo my advice, if you feel this is truly what you want to do with life, go ahead and apply for a job. The process is quite slow, and first few years are spent in preliminary testing and training, so it's unlikely to conflict with your studies. Worst case, you can re-apply later with knowledge gained. Feel free to email me at tobiasreynard@lsa.gov.ls",
+      "author": 3,
+      "created_at": "2025-10-19T20:22:56.193Z",
+      "accepted": true,
+      "rating": 1
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 4,
+    "fields": {
+      "question": 2,
+      "content": "DID YOU SERIOUSLY SAY \"TWSBI\" CRACKO??? LITERALLY MOST OVERRATED PEN, PISTON FILLING IS THE ONLY THING GOING FOR IT AND IT'S NOT EVEN THAT GOOD. GO BUY A PGS LIKE A REAL MAN INSTEAD. OR ARE YOU TOO BROKE? XDDD",
+      "author": 4,
+      "created_at": "2025-10-19T20:26:58.653Z",
+      "accepted": false,
+      "rating": -3
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 5,
+    "fields": {
+      "question": 4,
+      "content": "Could any of us?",
+      "author": 5,
+      "created_at": "2025-10-19T20:35:19.670Z",
+      "accepted": true,
+      "rating": 0
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 6,
+    "fields": {
+      "question": 4,
+      "content": "Every user on this site is a bot except you.",
+      "author": 5,
+      "created_at": "2025-10-19T20:35:29.296Z",
+      "accepted": false,
+      "rating": 0
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 7,
+    "fields": {
+      "question": 4,
+      "content": "Every user on this site is a bot except you?",
+      "author": 5,
+      "created_at": "2025-10-19T20:35:36.083Z",
+      "accepted": false,
+      "rating": 0
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 8,
+    "fields": {
+      "question": 4,
+      "content": "Every user on this site is a bot including you (:",
+      "author": 5,
+      "created_at": "2025-10-19T20:36:16.364Z",
+      "accepted": false,
+      "rating": 0
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 9,
+    "fields": {
+      "question": 2,
+      "content": "I just write on my tablet these days... but sometimes I still reach for my trusty Pilot Explorer. It's seen better days, but it works, and that's all that matters.",
+      "author": 5,
+      "created_at": "2025-10-19T20:37:32.453Z",
+      "accepted": false,
+      "rating": 1
+    }
+  },
+  {
+    "model": "qncy.answer",
+    "pk": 10,
+    "fields": {
+      "question": 5,
+      "content": "NVM figured it out: append &pagesize=1 to the page address !!! :P",
+      "author": 1,
+      "created_at": "2025-10-19T20:40:10.689Z",
+      "accepted": true,
+      "rating": 0
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 1,
+    "fields": {
+      "question": 1,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T18:10:01.601Z"
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 4,
+    "fields": {
+      "question": 2,
+      "user": 3,
+      "up": true,
+      "created": "2025-10-19T20:11:08.137Z"
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 5,
+    "fields": {
+      "question": 2,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T20:27:31.609Z"
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 9,
+    "fields": {
+      "question": 2,
+      "user": 2,
+      "up": true,
+      "created": "2025-10-19T20:30:53.277Z"
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 12,
+    "fields": {
+      "question": 4,
+      "user": 5,
+      "up": true,
+      "created": "2025-10-19T20:35:00.688Z"
+    }
+  },
+  {
+    "model": "qncy.questionvote",
+    "pk": 13,
+    "fields": {
+      "question": 4,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T20:46:48.335Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 1,
+    "fields": {
+      "answer": 1,
+      "user": 2,
+      "up": true,
+      "created": "2025-10-19T18:12:22.475Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 2,
+    "fields": {
+      "answer": 1,
+      "user": 3,
+      "up": true,
+      "created": "2025-10-19T20:11:09.003Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 3,
+    "fields": {
+      "answer": 2,
+      "user": 3,
+      "up": true,
+      "created": "2025-10-19T20:12:14.781Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 4,
+    "fields": {
+      "answer": 4,
+      "user": 1,
+      "up": false,
+      "created": "2025-10-19T20:27:23.176Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 6,
+    "fields": {
+      "answer": 3,
+      "user": 2,
+      "up": true,
+      "created": "2025-10-19T20:27:57.932Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 12,
+    "fields": {
+      "answer": 4,
+      "user": 2,
+      "up": false,
+      "created": "2025-10-19T20:30:22.951Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 13,
+    "fields": {
+      "answer": 4,
+      "user": 5,
+      "up": false,
+      "created": "2025-10-19T20:31:36.464Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 14,
+    "fields": {
+      "answer": 2,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T20:41:29.888Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 15,
+    "fields": {
+      "answer": 1,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T20:41:32.496Z"
+    }
+  },
+  {
+    "model": "qncy.answervote",
+    "pk": 16,
+    "fields": {
+      "answer": 9,
+      "user": 1,
+      "up": true,
+      "created": "2025-10-19T20:41:35.916Z"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 1,
+    "fields": {
+      "action_time": "2025-10-19T18:09:39.139Z",
+      "user": 1,
+      "content_type": 1,
+      "object_id": "1",
+      "object_repr": "shuttles",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 2,
+    "fields": {
+      "action_time": "2025-10-19T18:09:49.268Z",
+      "user": 1,
+      "content_type": 1,
+      "object_id": "2",
+      "object_repr": "hobbies",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 3,
+    "fields": {
+      "action_time": "2025-10-19T20:40:30.960Z",
+      "user": 1,
+      "content_type": 1,
+      "object_id": "3",
+      "object_repr": "meta",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 4,
+    "fields": {
+      "action_time": "2025-10-19T20:40:37.097Z",
+      "user": 1,
+      "content_type": 1,
+      "object_id": "4",
+      "object_repr": "software",
+      "action_flag": 1,
+      "change_message": "[{\"added\": {}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 5,
+    "fields": {
+      "action_time": "2025-10-19T20:40:43.604Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "4",
+      "object_repr": "What's the difference between a chatbot and a guy in a room pretending to be one?",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Tags\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 6,
+    "fields": {
+      "action_time": "2025-10-19T20:40:52.887Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "5",
+      "object_repr": "How do I check pagination on a forum with not enough posts?",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Tags\"]}}]"
+    }
+  },
+  {
+    "model": "admin.logentry",
+    "pk": 7,
+    "fields": {
+      "action_time": "2025-10-19T20:41:05.954Z",
+      "user": 1,
+      "content_type": 3,
+      "object_id": "5",
+      "object_repr": "How do I check pagination on a forum with not enough posts?",
+      "action_flag": 2,
+      "change_message": "[{\"changed\": {\"fields\": [\"Tags\"]}}]"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add tag",
+      "content_type": 1,
+      "codename": "add_tag"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change tag",
+      "content_type": 1,
+      "codename": "change_tag"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete tag",
+      "content_type": 1,
+      "codename": "delete_tag"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view tag",
+      "content_type": 1,
+      "codename": "view_tag"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 2,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 2,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 2,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 2,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add question",
+      "content_type": 3,
+      "codename": "add_question"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change question",
+      "content_type": 3,
+      "codename": "change_question"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete question",
+      "content_type": 3,
+      "codename": "delete_question"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view question",
+      "content_type": 3,
+      "codename": "view_question"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add answer",
+      "content_type": 4,
+      "codename": "add_answer"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change answer",
+      "content_type": 4,
+      "codename": "change_answer"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete answer",
+      "content_type": 4,
+      "codename": "delete_answer"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view answer",
+      "content_type": 4,
+      "codename": "view_answer"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add answer vote",
+      "content_type": 5,
+      "codename": "add_answervote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change answer vote",
+      "content_type": 5,
+      "codename": "change_answervote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete answer vote",
+      "content_type": 5,
+      "codename": "delete_answervote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view answer vote",
+      "content_type": 5,
+      "codename": "view_answervote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add question vote",
+      "content_type": 6,
+      "codename": "add_questionvote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change question vote",
+      "content_type": 6,
+      "codename": "change_questionvote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete question vote",
+      "content_type": 6,
+      "codename": "delete_questionvote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view question vote",
+      "content_type": 6,
+      "codename": "view_questionvote"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 7,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 7,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 7,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 7,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 8,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 8,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 8,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 8,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 9,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 9,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 9,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 9,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 10,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 10,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 10,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 10,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 11,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 11,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 11,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 11,
+      "codename": "view_session"
+    }
+  }
+]

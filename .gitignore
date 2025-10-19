@@ -7,7 +7,5 @@ media
 db.sqlite3
 
 todo.md
+ignore.json
 
-# Temporary!
-qncy/static/font
-qncy/migrations
