@@ -48,7 +48,7 @@ def index(request):
 def question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     
-    answers_list = Answer.objects.filter(question=question).order_by("-accepted")#, "-rating")
+    answers_list = Answer.objects.filter(question=question).order_by("-accepted", "-rating")
     context = {
         "question": question,
         "page_obj": paginator_page(request, answers_list),
@@ -115,6 +115,7 @@ def vote_question(request, question_id):
             if existing and vote.up:
                 vote.delete()
                 question.update_rating()
+                question.author.update_rating()
                 request.user.update_rating()
                 return HttpResponseRedirect(next)
             vote.up = True
@@ -122,6 +123,7 @@ def vote_question(request, question_id):
             if existing and not vote.up:
                 vote.delete()
                 question.update_rating()
+                question.author.update_rating()
                 request.user.update_rating()
                 return HttpResponseRedirect(next)
             vote.up = False
@@ -129,6 +131,7 @@ def vote_question(request, question_id):
             return HttpResponseBadRequest()
         vote.save()
         question.update_rating()
+        question.author.update_rating()
         request.user.update_rating()
         return HttpResponseRedirect(next)
     return HttpResponseBadRequest()
@@ -144,6 +147,8 @@ def vote_answer(request, answer_id):
                 answer_accepted = answer_accepted.get()
                 answer_accepted.accepted = False
                 answer_accepted.save()
+                if answer_accepted == answer:
+                    return HttpResponseRedirect(next)
             answer.accepted = True
             answer.save()
             return HttpResponseRedirect(next)
@@ -157,6 +162,7 @@ def vote_answer(request, answer_id):
             if existing and vote.up:
                 vote.delete()
                 answer.update_rating()
+                answer.author.update_rating()
                 request.user.update_rating()
                 return HttpResponseRedirect(next)
             vote.up = True
@@ -164,6 +170,7 @@ def vote_answer(request, answer_id):
             if existing and not vote.up:
                 vote.delete()
                 answer.update_rating()
+                answer.author.update_rating()
                 request.user.update_rating()
                 return HttpResponseRedirect(next)
             vote.up = False
@@ -171,6 +178,7 @@ def vote_answer(request, answer_id):
             return HttpResponseBadRequest()
         vote.save()
         answer.update_rating()
+        answer.author.update_rating()
         request.user.update_rating()
         return HttpResponseRedirect(next)
     return HttpResponseBadRequest()
