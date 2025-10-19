@@ -60,7 +60,7 @@
                 <p>Best members</p>
                 <ul class="users">
                 {% for user in common.top_users %}
-                    <li><a href="#">{{ user.username }}</a></li>
+                    <li><a href="#">{{ user.username }}</a> ({{ user.rating }})</li>
                 {% endfor %}
                 </ul>
             {% else %}

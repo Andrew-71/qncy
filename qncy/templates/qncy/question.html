@@ -12,11 +12,15 @@
 <h1 class="heading">{{ question.title }}</h1>
 
 <div class="card">
-    <div class="card-score">
-        <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
-        {{ question.rating }}
-        <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
-    </div>
+    <form action="{% url 'qncy:vote_question' question.id %}" method="post">
+        {% csrf_token %}
+        <div class="card-score">
+            <button type="submit" name="up"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
+            {{ question.rating }}
+            <button type="submit" name="down"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
+        </div>
+        <input type="hidden" name="next" value="{{ request.path }}">
+    </form>
     <div class="card-info">
         <p>{{ question.content }}</p>
         <div class="card-footer">
@@ -33,16 +37,20 @@
 {% if page_obj %}
     {% for answer in page_obj %}
         <div class="card">
-            <div class="card-score">
-                <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
-                {{ answer.rating }}
-                <button><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
-                {% if answer.accepted %}
-                <span title="Question owner accepted this answer"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -2 24 24" class="accepted"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg></span>
-                {% elif user.is_authenticated and user == question.author %}
-                <button title="Accept this answer"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -2 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg></button>
-                {% endif %}
-            </div>
+            <form action="{% url 'qncy:vote_answer' answer.id %}" method="post">
+                {% csrf_token %}
+                <div class="card-score">
+                    <button type="submit" name="up"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
+                    {{ answer.rating }}
+                    <button type="submit" name="down"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
+                    {% if answer.accepted %}
+                    <span title="Question owner accepted this answer"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -2 24 24" class="accepted"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg></span>
+                    {% elif user.is_authenticated and user == question.author %}
+                    <button title="Accept this answer" type="submit" name="accept"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -2 24 24"><path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/></svg></button>
+                    {% endif %}
+                </div>
+                <input type="hidden" name="next" value="{{ request.path }}">
+            </form>
             <div class="card-info">
                 <p>{{ answer.content }}</p>
                 <div class="card-footer">

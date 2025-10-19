@@ -1,4 +1,9 @@
 {% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/question.css' %}">
+{% endblock %}
 
 {% block title %}Index{% endblock %}
 

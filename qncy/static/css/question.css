@@ -26,12 +26,14 @@
     border-radius: 1000px !important;
     width: 32px;
     height: 32px;
+    padding: 0;
     border-color: var(--pour);
     border-style: solid;
     background-color: var(--droplet);
 }
 .card-score button:hover {
     background-color: var(--rain);
+    cursor: pointer;
 }
 .card-info {
     padding: 0;
