@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 from django.db.models import Sum, Case, When, IntegerField
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import PermissionDenied
 
 # User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
@@ -62,14 +63,35 @@ class Question(models.Model):
     
     def answers(self):
         return self.question_answer.all().count()
+    
+    def vote(self, user: User, up: bool):
+        vote_old = QuestionVote.objects.filter(question=self, user=user)
+        vote = QuestionVote(user=user, question=self)
+        existing = False
+        if vote_old.exists():
+            vote = vote_old.get()
+            existing = True
+        if existing and vote.up and up:
+            vote.delete()
+            self.update_rating()
+            self.author.update_rating()
+            return
+        elif existing and not vote.up and not up:
+            vote.delete()
+            self.update_rating()
+            self.author.update_rating()
+            return
+        vote.up = up
+        vote.save()
+        self.update_rating()
+        self.author.update_rating()
+        return
 
     def __str__(self):
         return self.title
 
 # Answer: content, author, creation date, accepted flag, rating
 class Answer(models.Model):
-    # NOTE: PROTECT may be better here:
-    # you might still want to see your answer to a deleted question
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question_answer")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -88,6 +110,42 @@ class Answer(models.Model):
             )
         )["score"] or 0
         self.save()
+
+    def accept(self, user: User):
+        if user != self.question.author:
+            raise PermissionDenied()
+        answer_accepted = Answer.objects.filter(question=self.question,accepted=True)
+        if answer_accepted.exists():
+            answer_accepted = answer_accepted.get()
+            answer_accepted.accepted = False
+            answer_accepted.save()
+            if answer_accepted == self:
+                return
+        self.accepted = True
+        self.save()
+
+    def vote(self, user: User, up: bool):
+        vote_old = AnswerVote.objects.filter(answer=self, user=user)
+        vote = AnswerVote(user=user, answer=self)
+        existing = False
+        if vote_old.exists():
+            vote = vote_old.get()
+            existing = True
+        if existing and vote.up and up:
+            vote.delete()
+            self.update_rating()
+            self.author.update_rating()
+            return
+        elif existing and not vote.up and not up:
+            vote.delete()
+            self.update_rating()
+            self.author.update_rating()
+            return
+        vote.up = up
+        vote.save()
+        self.update_rating()
+        self.author.update_rating()
+        return
     
     def __str__(self):
         return self.author.username + " - " + self.question.title

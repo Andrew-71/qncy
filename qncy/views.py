@@ -104,35 +104,15 @@ def settings(request):
 def vote_question(request, question_id):
     if request.method == 'POST':
         question = get_object_or_404(Question, id=question_id)
-        v_old = QuestionVote.objects.filter(question=question, user=request.user)
-        vote = QuestionVote(user=request.user, question=question)
-        existing = False
-        if v_old.exists():
-            vote = v_old.get()
-            existing = True
-        next = request.POST.get('next', '/')
+        up = True
         if request.POST.get("up") is not None:
-            if existing and vote.up:
-                vote.delete()
-                question.update_rating()
-                question.author.update_rating()
-                request.user.update_rating()
-                return HttpResponseRedirect(next)
-            vote.up = True
+            up = True
         elif request.POST.get("down") is not None:
-            if existing and not vote.up:
-                vote.delete()
-                question.update_rating()
-                question.author.update_rating()
-                request.user.update_rating()
-                return HttpResponseRedirect(next)
-            vote.up = False
+            up = False
         else:
             return HttpResponseBadRequest()
-        vote.save()
-        question.update_rating()
-        question.author.update_rating()
-        request.user.update_rating()
+        question.vote(request.user, up)
+        next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
     return HttpResponseBadRequest()
 
@@ -141,44 +121,16 @@ def vote_answer(request, answer_id):
     if request.method == 'POST':
         next = request.POST.get('next', '/')
         answer = get_object_or_404(Answer, id=answer_id)
-        if request.POST.get("accept") is not None and answer.question.author == request.user:
-            answer_accepted = Answer.objects.filter(question=answer.question,accepted=True)
-            if answer_accepted.exists():
-                answer_accepted = answer_accepted.get()
-                answer_accepted.accepted = False
-                answer_accepted.save()
-                if answer_accepted == answer:
-                    return HttpResponseRedirect(next)
-            answer.accepted = True
-            answer.save()
+        if request.POST.get("accept") is not None:
+            answer.accept(request.user)
             return HttpResponseRedirect(next)
-        v_old = AnswerVote.objects.filter(answer=answer, user=request.user)
-        vote = AnswerVote(user=request.user, answer=answer)
-        existing = False
-        if v_old.exists():
-            vote = v_old.get()
-            existing = True
+        up = True
         if request.POST.get("up") is not None:
-            if existing and vote.up:
-                vote.delete()
-                answer.update_rating()
-                answer.author.update_rating()
-                request.user.update_rating()
-                return HttpResponseRedirect(next)
-            vote.up = True
+            up = True
         elif request.POST.get("down") is not None:
-            if existing and not vote.up:
-                vote.delete()
-                answer.update_rating()
-                answer.author.update_rating()
-                request.user.update_rating()
-                return HttpResponseRedirect(next)
-            vote.up = False
+            up = False
         else:
             return HttpResponseBadRequest()
-        vote.save()
-        answer.update_rating()
-        answer.author.update_rating()
-        request.user.update_rating()
+        answer.vote(request.user, up)
         return HttpResponseRedirect(next)
     return HttpResponseBadRequest()
