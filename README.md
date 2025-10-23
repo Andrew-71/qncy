@@ -13,5 +13,5 @@ python manage.py migrate
 python manage.py loaddata testdata.json
 ```
 
-Passwords for all users is `demouser` (except Ernst, who has `helloworld1`).
+Passwords for all users is `demouser`.
 The administrator account is called `demouser`.

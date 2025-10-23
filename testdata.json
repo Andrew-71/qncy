@@ -1,6 +1,6 @@
 [
   {
-    "model": "qncy.user",
+    "model": "core.user",
     "pk": 1,
     "fields": {
       "password": "pbkdf2_sha256$1000000$qzcrffinf4vmeroTp0Bsjs$UpgDxLFkx+xNRP2O7I+iFCe6NOgMaJJWbK37phFCSe8=",
@@ -20,10 +20,10 @@
     }
   },
   {
-    "model": "qncy.user",
+    "model": "core.user",
     "pk": 2,
     "fields": {
-      "password": "pbkdf2_sha256$1000000$a3eKpxyJty06U4x9SEwMpT$UMuegDJ0G9RUrz9QCBGx6ZYxAowlNs4Gqd+4gefFQ3Q=",
+      "password": "pbkdf2_sha256$1000000$rM9PBB6BpDJsUfrAvKu5QX$VQa4uIhBOcZHxAbmN4Ox1iHNT9A+3sEcyEXXWzsOSaw=",
       "last_login": "2025-10-19T20:27:54.299Z",
       "is_superuser": false,
       "username": "Ernst",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "model": "qncy.user",
+    "model": "core.user",
     "pk": 3,
     "fields": {
       "password": "pbkdf2_sha256$1000000$ioTCQ063ltsEQ3A0Y9f1Ta$vwAFeqKBTChshvxtXed2WjNxkSkSA4/Wv9scdkExkNI=",
@@ -60,7 +60,7 @@
     }
   },
   {
-    "model": "qncy.user",
+    "model": "core.user",
     "pk": 4,
     "fields": {
       "password": "pbkdf2_sha256$1000000$WuFzLLK3IXOjjAWdwOvrf7$r8nmnygCNHo9Z6sZIa46wn/hi12VCrReO7L2Ipw1R5Y=",
@@ -80,7 +80,7 @@
     }
   },
   {
-    "model": "qncy.user",
+    "model": "core.user",
     "pk": 5,
     "fields": {
       "password": "pbkdf2_sha256$1000000$84G0FN12YyWq9hxgdSSNbv$zkglh8jwQo1HDElZClOtg7Ubmf6tW4gHqXbY5A6x3bA=",

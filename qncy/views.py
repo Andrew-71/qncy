@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 
-from qncy.models import Question, Tag, User, Answer, QuestionVote, AnswerVote
-from qncy.forms import QuestionForm, RegisterForm, AnswerForm, SettingsForm
+from core.models import User
+
+from qncy.models import Question, Tag, Answer
+from qncy.forms import QuestionForm, AnswerForm
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -82,23 +83,6 @@ def ask(request):
         form.save()
         return redirect("qncy:question", question_id=question.id)
     return render(request, "qncy/ask.html", {"form": form} | common_context())
-
-def register(request):
-    user = User()
-    form = RegisterForm(request.POST or None, request.FILES or None, instance=user)
-    if form.is_valid():
-        form.save()
-        login(request, user)
-        return redirect("qncy:index")
-    return render(request, "registration/register.html", {"form": form} | common_context())
-
-@login_required
-def settings(request):
-    form = SettingsForm(request.POST or None, request.FILES or None, instance=request.user)
-    if form.is_valid():
-        form.save()
-        return redirect("qncy:index")
-    return render(request, "registration/settings.html", {"form": form} | common_context())
 
 @login_required
 def vote_question(request, question_id):

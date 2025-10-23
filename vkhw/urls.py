@@ -22,6 +22,7 @@ from vkhw import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include("core.urls")),
     path("", include("qncy.urls")),
 ]
 
