@@ -80,7 +80,7 @@ def ask(request):
     if form.is_valid():
         form.author_id = request.user.id
         form.save()
-        return redirect(f"question/{question.id}")
+        return redirect("qncy:question", question_id=question.id)
     return render(request, "qncy/ask.html", {"form": form} | common_context())
 
 def register(request):
@@ -89,7 +89,7 @@ def register(request):
     if form.is_valid():
         form.save()
         login(request, user)
-        return redirect("/")
+        return redirect("qncy:index")
     return render(request, "registration/register.html", {"form": form} | common_context())
 
 @login_required
@@ -97,7 +97,7 @@ def settings(request):
     form = SettingsForm(request.POST or None, request.FILES or None, instance=request.user)
     if form.is_valid():
         form.save()
-        return redirect("/")
+        return redirect("qncy:index")
     return render(request, "registration/settings.html", {"form": form} | common_context())
 
 @login_required
