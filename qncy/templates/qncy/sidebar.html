@@ -1,0 +1,23 @@
+<aside class="sidebar">
+{% if common.top_tags %}
+    <p>Popular tags</p>
+    <ul class="tags">
+    {% for tag in common.top_tags %}
+        <li><a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No tags are available.</p>
+{% endif %}
+
+{% if common.top_users %}
+    <p>Best members</p>
+    <ul class="users">
+    {% for user in common.top_users %}
+        <li><a href="#">{{ user.username }}</a> ({{ user.rating }})</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No members exist.</p>
+{% endif %}
+</aside>

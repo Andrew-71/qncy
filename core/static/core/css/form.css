@@ -1,0 +1,81 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+form > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.errorlist {
+    list-style: none;
+    color: var(--black-lavender);
+    padding: 0;
+    margin: 0;
+}
+
+.helptext {
+    color: var(--storm);
+}
+.helptext ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+form label { font-weight: bold; }
+
+form input, form textarea {
+    width: 80%;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+form button {
+    text-transform: uppercase;
+    border-style: none;
+    color: var(--drizzle);
+    padding: 5px 20px;
+    border-radius: 5px;
+    background-color: var(--lavender);
+    max-width: 140px;
+}
+
+form button:hover {
+    text-shadow: 0 0 4px var(--soft-lavender);
+    background-color: var(--black-lavender);
+    cursor: pointer;
+}
+
+input::file-selector-button {
+    border-style: none;
+    padding: 1px 4px;
+    border-radius: 2px;
+    background-color: var(--rain);
+    border-width: 1px;
+    border-color: var(--storm);
+    border-style: solid;
+}
+
+input::file-selector-button:hover {
+    background-color: var(--pour);
+    cursor: pointer;
+}
+
+/* If it's stupid and it works... */
+form > div:has(input[type=checkbox]) {
+    display: inline;
+    line-height: 150%;
+}
+input[type=checkbox] {
+    width: inherit;
+}
+form > div:has(input[type=checkbox]) > label:first-child {
+    display: block;
+}
+
+.answer-form {
+    margin-top: 20px;
+}

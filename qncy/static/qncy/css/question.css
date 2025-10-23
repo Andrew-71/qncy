@@ -1,0 +1,96 @@
+.card {
+    border-style: solid;
+    border-color: var(--pour);
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-width: 2px;
+    margin: 10px;
+    padding: 10px;
+    padding-left: 0;
+    margin-left: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px
+}
+.card-score {
+    padding-top: 0;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    width: 50px;
+    align-items: center;
+    gap: 5px;
+}
+.card-score button {
+    border-radius: 1000px !important;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border-color: var(--pour);
+    border-style: solid;
+    background-color: var(--droplet);
+}
+.card-score button:hover {
+    background-color: var(--rain);
+    cursor: pointer;
+}
+.card-info {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    white-space: pre-wrap;
+}
+.card-info > .card-title > a, .card-info > .card-title > a:visited {
+    color: var(--black-lavender);
+    text-decoration: none;
+}
+.card-info > .card-title > a:hover, .card-info > .card-title > a:visited:hover {
+    text-shadow: 0 0 10px var(--soft-lavender);
+}
+.card-title {
+    padding: 0;
+    margin: 0;
+    padding-bottom: 5px;
+}
+.card-info p {
+    padding-top: 0;
+    margin-top: 0;
+}
+.card-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card-footer img {
+    display: inline;
+    height: 16px;
+    width: 16px;
+    vertical-align: middle;
+    border-radius: 5px;
+    background-color: var(--soft-lavender);
+    border-style: none;
+}
+
+/* Pagination */
+.step-links > a, .step-links > a:visited {
+    border-style: none;
+    padding: 1px 4px;
+    border-radius: 2px;
+    background-color: var(--rain);
+    border-width: 1px;
+    border-color: var(--storm);
+    border-style: solid;
+    text-decoration: none;
+    color: inherit;
+}
+
+.step-links > a:hover, .step-links > a:visited:hover {
+    background-color: var(--pour);
+    cursor: pointer;
+    text-decoration: none;
+}
+

@@ -1,0 +1,17 @@
+{% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'qncy/css/question.css' %}">
+{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="heading">
+    <h1>Questions tagged <span style="text-decoration:underline">{{ tag.name }}</span></h1>
+</div>
+
+{% include "qncy/question_list.html" %} 
+
+{% endblock %}
