@@ -32,6 +32,8 @@ class QuestionForm(forms.ModelForm):
             # ^ this looks nice, but it's easier for us to iterate since we
             #   restrict to 5 tags (like on StackOverflow) anyway
             for tag in tag_names:
+                if len(tag) == 0: # avoid creating empty tags
+                    continue
                 tag_obj = Tag.objects.filter(name=tag)
                 if tag_obj.exists():
                     question.tags.add(tag_obj.get())
