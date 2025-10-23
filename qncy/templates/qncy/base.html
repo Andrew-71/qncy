@@ -5,8 +5,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'core/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
   {% block head %}{% endblock head %}
   <title>{% block title %}{% endblock title %} - QNCY</title>
 </head>
@@ -44,29 +44,7 @@
         <section class="mainbar">
             {% block content %}{% endblock content %}
         </section>
-        <aside class="sidebar">
-            {% if common.top_tags %}
-                <p>Popular tags</p>
-                <ul class="tags">
-                {% for tag in common.top_tags %}
-                    <li><a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a></li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>No tags are available.</p>
-            {% endif %}
-
-            {% if common.top_users %}
-                <p>Best members</p>
-                <ul class="users">
-                {% for user in common.top_users %}
-                    <li><a href="#">{{ user.username }}</a> ({{ user.rating }})</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>No members exist.</p>
-            {% endif %}
-        </aside>
+        {% include "qncy/sidebar.html" %} 
     </div>
 </body>
 </html>

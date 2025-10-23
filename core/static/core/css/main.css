@@ -20,17 +20,10 @@
 }
 
 @font-face {
-  font-family: 'LibreCaslon';
-  font-style: normal;
-  font-weight: 600;
-  src: url('/static/font/libre_caslon/LibreCaslonText-Regular.ttf') format('truetype');
-}
-
-@font-face {
   font-family: 'LibreCaslonDisplay';
   font-style: normal;
   font-weight: 600;
-  src: url('/static/font/libre_caslon_disp/LibreCaslonDisplay-Regular.ttf') format('truetype');
+  src: url('/static/core/font/libre_caslon_disp/LibreCaslonDisplay-Regular.ttf') format('truetype');
 }
 
 body {
