@@ -98,7 +98,7 @@ def vote_question(request, question_id):
         question.vote(request.user, up)
         next = request.POST.get('next', '/')
         return HttpResponseRedirect(next)
-    return HttpResponseBadRequest()
+    return redirect("qncy:index")
 
 @login_required
 def vote_answer(request, answer_id):
@@ -117,4 +117,4 @@ def vote_answer(request, answer_id):
             return HttpResponseBadRequest()
         answer.vote(request.user, up)
         return HttpResponseRedirect(next)
-    return HttpResponseBadRequest()
+    return redirect("qncy:index")
