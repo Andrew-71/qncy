@@ -50,7 +50,7 @@ def hot(request):
     context = {
         "page_obj": paginator_page(request, hot_questions),
     }
-    return render(request, "qncy/index.html", context | common_context())
+    return render(request, "qncy/hot.html", context | common_context())
 
 def question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
