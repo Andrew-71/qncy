@@ -12,8 +12,21 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class QuestionManager(models.Manager):
+    def get_new(self):
+        return self.order_by("-created_at")
+    
+    def get_hot(self):
+        # NOTE: Right now this is more of a "top". Add time cut-off?
+        return self.order_by("-rating", "-created_at")
+
+    def get_tagged(self, tag):
+        return self.filter(tags=tag).order_by("-created_at")
+
 # Question: title, content, author, creation date, tags, rating
 class Question(models.Model):
+    objects = QuestionManager()
+
     # StackOverflow appears to have this as limit via
     # https://meta.stackexchange.com/questions/176445/
     title = models.CharField(max_length=150)
@@ -64,8 +77,14 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
+class AnswerManager(models.Manager):
+    def for_question(self, question):
+        return self.filter(question=question).order_by("-accepted", "-rating")
+
 # Answer: content, author, creation date, accepted flag, rating
 class Answer(models.Model):
+    objects = AnswerManager()
+
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question_answer")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)

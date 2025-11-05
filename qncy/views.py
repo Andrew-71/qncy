@@ -39,17 +39,23 @@ def common_context():
     }
 
 def index(request):
-    # TODO: sorting?
-    latest_question_list = Question.objects.order_by("-created_at")
+    latest_questions = Question.objects.get_new()
     context = {
-        "page_obj": paginator_page(request, latest_question_list),
+        "page_obj": paginator_page(request, latest_questions),
+    }
+    return render(request, "qncy/index.html", context | common_context())
+
+def hot(request):
+    hot_questions = Question.objects.get_hot()
+    context = {
+        "page_obj": paginator_page(request, hot_questions),
     }
     return render(request, "qncy/index.html", context | common_context())
 
 def question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     
-    answers_list = Answer.objects.filter(question=question).order_by("-accepted", "-rating")
+    answers_list = Answer.objects.for_question(question)
     context = {
         "question": question,
         "page_obj": paginator_page(request, answers_list),
@@ -65,12 +71,12 @@ def question(request, question_id):
 
     return render(request, "qncy/question.html", context | common_context())
 
-def tag(request, tag_name):
+def tagged(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
-    tagged_questions_list = Question.objects.filter(tags=tag).order_by("-created_at")
+    tagged_questions = Question.objects.get_tagged(tag)
     context = {
         "tag": tag,
-        "page_obj": paginator_page(request, tagged_questions_list),
+        "page_obj": paginator_page(request, tagged_questions),
     }
     return render(request, "qncy/tagged.html", context | common_context())
 
@@ -79,7 +85,6 @@ def ask(request):
     question = Question(author=request.user)
     form = QuestionForm(request.POST or None, request.FILES or None, instance=question)
     if form.is_valid():
-        form.author_id = request.user.id
         form.save()
         return redirect("qncy:question", question_id=question.id)
     return render(request, "qncy/ask.html", {"form": form} | common_context())

@@ -10,7 +10,7 @@
 {% block content %}
 <div class="heading">
     <h1>New questions</h1>
-    <a href="#">trending questions</a>
+    <a href="{% url 'qncy:hot' %}">trending questions</a>
 </div>
 
 {% include "qncy/question_list.html" %} 
