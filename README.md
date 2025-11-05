@@ -5,13 +5,12 @@ Web Technologies homework at VK Education.
 
 ## Test data
 
-Until a script to auto-generate data is written, sample data is provided.
-To start a new db with it (assuming no db exists yet), do the following:
+To start a new db with mock data and n users (assuming no db exists yet),
+do the following:
 
 ```sh
 python manage.py migrate
-python manage.py loaddata testdata.json
+python manage.py fill_db <n>
 ```
 
-Passwords for all users is `demouser`.
-The administrator account is called `demouser`.
+Passwords for all users is `demopassword`.
