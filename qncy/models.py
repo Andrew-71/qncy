@@ -1,4 +1,3 @@
-import datetime
 from django.db import models
 from django.db.models import Sum, Case, When, IntegerField
 from django.core.exceptions import PermissionDenied
@@ -32,7 +31,7 @@ class Question(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="questions")
-    created_at = models.DateTimeField(default=datetime.datetime.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag, blank=True)
     rating = models.IntegerField(default=0)
 
@@ -46,6 +45,7 @@ class Question(models.Model):
                 )
             )
         )["score"] or 0
+        self.author.update_rating()
         self.save()
     
     def answers(self):
@@ -61,17 +61,14 @@ class Question(models.Model):
         if existing and vote.up and up:
             vote.delete()
             self.update_rating()
-            self.author.update_rating()
             return
         elif existing and not vote.up and not up:
             vote.delete()
             self.update_rating()
-            self.author.update_rating()
             return
         vote.up = up
         vote.save()
         self.update_rating()
-        self.author.update_rating()
         return
 
     def __str__(self):
@@ -88,7 +85,7 @@ class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question_answer")
     content = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(default=datetime.datetime.now)
+    created_at = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
     rating = models.IntegerField(default=0)
 
@@ -102,6 +99,7 @@ class Answer(models.Model):
                 )
             )
         )["score"] or 0
+        self.author.update_rating()
         self.save()
 
     def accept(self, user: User):
@@ -127,17 +125,14 @@ class Answer(models.Model):
         if existing and vote.up and up:
             vote.delete()
             self.update_rating()
-            self.author.update_rating()
             return
         elif existing and not vote.up and not up:
             vote.delete()
             self.update_rating()
-            self.author.update_rating()
             return
         vote.up = up
         vote.save()
         self.update_rating()
-        self.author.update_rating()
         return
     
     def __str__(self):
@@ -149,7 +144,7 @@ class QuestionVote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, 
         related_name="question_vote")
     up = models.BooleanField(blank=False, default=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
@@ -165,7 +160,7 @@ class AnswerVote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, 
         related_name="answer_vote")
     up = models.BooleanField(blank=False, default=True)
-    created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
