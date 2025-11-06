@@ -32,17 +32,23 @@ class Command(BaseCommand):
                 username=fake.user_name(),
             )
             user.set_password("demopassword")
-            user.save()
             users.append(user)
 
+            # We can't ignore_conflicts like with votes because that prevents
+            # us from getting primary keys, making tagging impossible
             try:
-                tag = Tag(name=' '.join(fake.words(randint(1, 3))))
+                tag_name = ' '.join(fake.words(randint(1, 3)))
+                tag = Tag(name=tag_name)
                 tag.save()
                 tags.append(tag)
             except IntegrityError:
                 self.stdout.write(
-                    self.style.WARNING('Skipped tag due to constraint("%s")' % tag)
+                    self.style.WARNING('Skipped tag due to constraint ("%s")' % tag)
                 )
+        users = User.objects.bulk_create(users)
+        self.stdout.write(
+            self.style.SUCCESS(f"Created {options['ratio'][0]} users")
+        )
         
         for _ in range(options["ratio"][0]*10):
             question = Question(
@@ -50,49 +56,56 @@ class Command(BaseCommand):
                 title=fake.sentence(),
                 content=fake.text(),
             )
-            question.save()
-            question.tags.set(choices(tags, k=randint(1,4)))
-            question.save()
             questions.append(question)
+        questions = Question.objects.bulk_create(questions)
+        self.stdout.write(
+            self.style.SUCCESS(f"Created {options['ratio'][0]*10} questions")
+        )
+
         for _ in range(options["ratio"][0]*100):
             answer = Answer(
                 question=choice(questions),
                 author=choice(users),
                 content=fake.paragraph(),
             )
-            answer.save()
             answers.append(answer)
+        answers = Answer.objects.bulk_create(answers)
+        self.stdout.write(
+            self.style.SUCCESS(f"Created {options['ratio'][0]*100} answers")
+        )
         
+        answer_votes = []
+        question_votes = []
         for _ in range(options["ratio"][0]*200):
-            # we are poised to run into a couple integrity errors
-            # this is a hack, true.
             if choice([True, False]):
-                while True:
-                    try:
-                        av = AnswerVote(
-                            answer=choice(answers),
-                            user=choice(users),
-                            up=(randint(1,5) > 1),
-                        )
-                        av.save()
-                        av.answer.update_rating()
-                        break
-                    except IntegrityError:
-                        continue
+                av = AnswerVote(
+                    answer=choice(answers),
+                    user=choice(users),
+                    up=(randint(1,5) > 1),
+                )
+                answer_votes.append(av)
             else:
-               while True:
-                    try:
-                        qv = QuestionVote(
-                            question=choice(questions),
-                            user=choice(users),
-                            up=(randint(1,5) > 1),
-                        )
-                        qv.save()
-                        qv.question.update_rating()
-                        break
-                    except IntegrityError:
-                        continue 
+                qv = QuestionVote(
+                    question=choice(questions),
+                    user=choice(users),
+                    up=(randint(1,5) > 1),
+                )
+                question_votes.append(qv)
+        AnswerVote.objects.bulk_create(answer_votes, ignore_conflicts=True)
+        QuestionVote.objects.bulk_create(question_votes, ignore_conflicts=True)
+        self.stdout.write(
+            self.style.SUCCESS(f"Created {options['ratio'][0]*200} votes")
+        )
+
+        for question in questions:
+            question.tags.set(choices(tags, k=randint(1,4)))
+            question.update_rating()
+        for answer in answers:
+            answer.update_rating()
+        self.stdout.write(
+            self.style.SUCCESS("Tagged and rated all questions and answers")
+        )
 
         self.stdout.write(
-            self.style.SUCCESS('Successfully filled db "%s"' % options["ratio"])
+            self.style.SUCCESS(f"Successfully filled db with ratio of {options['ratio'][0]}")
         )
