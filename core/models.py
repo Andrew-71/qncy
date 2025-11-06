@@ -6,7 +6,7 @@ from django.apps import apps
 
 # User: email, username, pass, profile pic, registration date, rating
 class User(AbstractUser):
-    pfp = models.ImageField(upload_to="profile/", blank=True)
+    pfp = models.ImageField(upload_to="profile/", verbose_name="Profile image", blank=True)
     rating = models.IntegerField(default=0)
 
     def update_rating(self):

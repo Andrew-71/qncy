@@ -13,6 +13,7 @@ class CustomUserAdmin(UserAdmin):
         if fieldset[0] == 'Personal info'
         else fieldset
         for fieldset in UserAdmin.fieldsets
-    )
+    ) + (('Rating', {'fields': ('rating',)}),)
+    readonly_fields=('rating',)
 
 admin.site.register(User, CustomUserAdmin)
