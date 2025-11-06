@@ -30,7 +30,7 @@ class Question(models.Model):
     # https://meta.stackexchange.com/questions/176445/
     title = models.CharField(max_length=150)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="questions")
+    author = models.ForeignKey("core.User", on_delete=models.CASCADE, related_name="questions")
     created_at = models.DateTimeField(auto_now_add=True)
     tags = models.ManyToManyField(Tag, blank=True)
     rating = models.IntegerField(default=0)
@@ -82,9 +82,9 @@ class AnswerManager(models.Manager):
 class Answer(models.Model):
     objects = AnswerManager()
 
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question_answer")
+    question = models.ForeignKey("qncy.Question", on_delete=models.CASCADE, related_name="question_answer")
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey("core.User", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
     rating = models.IntegerField(default=0)
@@ -139,9 +139,9 @@ class Answer(models.Model):
         return self.author.username + " - " + self.question.title
 
 class QuestionVote(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name="question_vote")
+    question = models.ForeignKey("qncy.Question", on_delete=models.CASCADE, related_name="question_vote")
                        
-    user = models.ForeignKey(User, on_delete=models.CASCADE, 
+    user = models.ForeignKey("core.User", on_delete=models.CASCADE, 
         related_name="question_vote")
     up = models.BooleanField(blank=False, default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -155,9 +155,9 @@ class QuestionVote(models.Model):
         return f"{'UP' if self.up else 'DOWN'} - {self.user.username} - {self.question.title}"
 
 class AnswerVote(models.Model):
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name="answer_vote")
+    answer = models.ForeignKey("qncy.Answer", on_delete=models.CASCADE, related_name="answer_vote")
                        
-    user = models.ForeignKey(User, on_delete=models.CASCADE, 
+    user = models.ForeignKey("core.User", on_delete=models.CASCADE, 
         related_name="answer_vote")
     up = models.BooleanField(blank=False, default=True)
     created_at = models.DateTimeField(auto_now_add=True)
