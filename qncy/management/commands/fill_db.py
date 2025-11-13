@@ -29,7 +29,7 @@ class Command(BaseCommand):
         for _ in range(options["ratio"][0]):
             user = User(
                 email = fake.email(),
-                username=fake.user_name(),
+                username=fake.user_name() + str(randint(1, 71)),
             )
             user.set_password("demopassword")
             users.append(user)

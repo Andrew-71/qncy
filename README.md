@@ -3,14 +3,16 @@
 This is the repository for my question & answer platform, developed as
 Web Technologies homework at VK Education.
 
-## Test data
+## Deployment
 
-To start a new db with mock data and n users (assuming no db exists yet),
-do the following:
+If you have Docker installed and are fine with temporarily losing ~1.5gb of
+space, you can deploy a fully working instance of the app by running the
+following command:
 
 ```sh
-python manage.py migrate
-python manage.py fill_db <n>
+sh deploy.sh
 ```
 
+This will create a docker stack named `vk-web` with a working server
+pre-populated with 25 fake users and mock data.
 Passwords for all users is `demopassword`.
