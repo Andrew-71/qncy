@@ -45,7 +45,7 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.WARNING('Skipped tag due to constraint ("%s")' % tag)
                 )
-        users = User.objects.bulk_create(users)
+        users = User.objects.bulk_create(users, batch_size=50)
         self.stdout.write(
             self.style.SUCCESS(f"Created {options['ratio'][0]} users")
         )
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 content=fake.text(),
             )
             questions.append(question)
-        questions = Question.objects.bulk_create(questions)
+        questions = Question.objects.bulk_create(questions, batch_size=200)
         self.stdout.write(
             self.style.SUCCESS(f"Created {options['ratio'][0]*10} questions")
         )
@@ -69,7 +69,7 @@ class Command(BaseCommand):
                 content=fake.paragraph(),
             )
             answers.append(answer)
-        answers = Answer.objects.bulk_create(answers)
+        answers = Answer.objects.bulk_create(answers, batch_size=200)
         self.stdout.write(
             self.style.SUCCESS(f"Created {options['ratio'][0]*100} answers")
         )
@@ -91,8 +91,8 @@ class Command(BaseCommand):
                     up=(randint(1,5) > 1),
                 )
                 question_votes.append(qv)
-        AnswerVote.objects.bulk_create(answer_votes, ignore_conflicts=True)
-        QuestionVote.objects.bulk_create(question_votes, ignore_conflicts=True)
+        AnswerVote.objects.bulk_create(answer_votes, ignore_conflicts=True, batch_size=1000)
+        QuestionVote.objects.bulk_create(question_votes, ignore_conflicts=True, batch_size=1000)
         self.stdout.write(
             self.style.SUCCESS(f"Created {options['ratio'][0]*200} votes")
         )
