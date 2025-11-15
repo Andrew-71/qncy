@@ -1,9 +1,9 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.db.models import Sum, Case, When, IntegerField, Value
 from qncy.models import Question, User, Tag, Answer, AnswerVote, QuestionVote
-from django.db import IntegrityError
 
 from random import choice, choices, randint
-
 from faker import Faker
 
 
@@ -15,102 +15,182 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         fake = Faker()
+        ratio = options["ratio"][0]
 
-        # <ratio> users
-        # <ratio>*10 questions
-        # <ratio>*100 answers
-        # <ratio> tags
-        # <ratio>*200 votes
+        # counts
+        n_users = ratio
+        n_tags = ratio
+        n_questions = ratio * 10
+        n_answers = ratio * 100
+        n_votes = ratio * 200
 
-        users = []
-        tags = []
-        questions = []
-        answers = []
+        self.stdout.write(self.style.NOTICE("Starting DB fill..."))
 
-        for _ in range(options["ratio"][0]):
-            user = User(
-                email=fake.email(),
-                username=fake.user_name() + str(randint(1, 71)),
-            )
-            user.set_password("demopassword")
-            users.append(user)
-
-            # We can't ignore_conflicts like with votes because that prevents
-            # us from getting primary keys, making tagging impossible
-            try:
-                tag_name = " ".join(fake.words(randint(1, 3)))
-                tag = Tag(name=tag_name)
-                tag.save()
-                tags.append(tag)
-            except IntegrityError:
-                self.stdout.write(
-                    self.style.WARNING('Skipped tag due to constraint ("%s")' % tag)
+        with transaction.atomic():
+            # 1) create users + tags
+            user_objs = []
+            tag_objs = []
+            for _ in range(n_users):
+                u = User(
+                    email=fake.email(),
+                    username=fake.user_name() + str(randint(1, 71)),
+                    password="demopassword",
                 )
-        users = User.objects.bulk_create(users, batch_size=50)
-        self.stdout.write(self.style.SUCCESS(f"Created {options['ratio'][0]} users"))
+                # While technically better, this is EXTREMELY slow,
+                # and the reason this function has been taking so long to run.
+                # Demo data shouldn't be secure anyway, right?
+                # u.set_password("demopassword")
+                user_objs.append(u)
 
-        for _ in range(options["ratio"][0] * 10):
-            question = Question(
-                author=choice(users),
-                title=fake.sentence(),
-                content=fake.text(),
-            )
-            questions.append(question)
-        questions = Question.objects.bulk_create(questions, batch_size=200)
-        self.stdout.write(
-            self.style.SUCCESS(f"Created {options['ratio'][0] * 10} questions")
-        )
-
-        for _ in range(options["ratio"][0] * 100):
-            answer = Answer(
-                question=choice(questions),
-                author=choice(users),
-                content=fake.paragraph(),
-            )
-            answers.append(answer)
-        answers = Answer.objects.bulk_create(answers, batch_size=200)
-        self.stdout.write(
-            self.style.SUCCESS(f"Created {options['ratio'][0] * 100} answers")
-        )
-
-        answer_votes = []
-        question_votes = []
-        for _ in range(options["ratio"][0] * 200):
-            if choice([True, False]):
-                av = AnswerVote(
-                    answer=choice(answers),
-                    user=choice(users),
-                    up=(randint(1, 5) > 1),
+                tag_name = (
+                    " ".join(fake.words(randint(1, 3))) + " " + str(randint(1, 326))
                 )
-                answer_votes.append(av)
-            else:
-                qv = QuestionVote(
-                    question=choice(questions),
-                    user=choice(users),
-                    up=(randint(1, 5) > 1),
-                )
-                question_votes.append(qv)
-        AnswerVote.objects.bulk_create(
-            answer_votes, ignore_conflicts=True, batch_size=1000
-        )
-        QuestionVote.objects.bulk_create(
-            question_votes, ignore_conflicts=True, batch_size=1000
-        )
-        self.stdout.write(
-            self.style.SUCCESS(f"Created {options['ratio'][0] * 200} votes")
-        )
+                tag_objs.append(Tag(name=tag_name))
 
-        for question in questions:
-            question.tags.set(choices(tags, k=randint(1, 4)))
-            question.update_rating()
-        for answer in answers:
-            answer.update_rating()
-        self.stdout.write(
-            self.style.SUCCESS("Tagged and rated all questions and answers")
-        )
+            User.objects.bulk_create(user_objs, batch_size=500)
+            Tag.objects.bulk_create(tag_objs, batch_size=1000)
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Successfully filled db with ratio of {options['ratio'][0]}"
+            users = list(User.objects.order_by("-id")[:n_users])
+            tags = list(Tag.objects.order_by("-id")[:n_tags])
+            self.stdout.write(
+                self.style.SUCCESS(f"Created {n_users} users and {n_tags} tags")
             )
+
+            question_objs = []
+            for _ in range(n_questions):
+                question_objs.append(
+                    Question(
+                        author=choice(users),
+                        title=fake.sentence(),
+                        content=fake.text(),
+                    )
+                )
+            Question.objects.bulk_create(question_objs, batch_size=1000)
+            questions = list(Question.objects.order_by("-id")[:n_questions])
+            self.stdout.write(self.style.SUCCESS(f"Created {n_questions} questions"))
+
+            answer_objs = []
+            for _ in range(n_answers):
+                answer_objs.append(
+                    Answer(
+                        question=choice(questions),
+                        author=choice(users),
+                        content=fake.paragraph(),
+                    )
+                )
+            Answer.objects.bulk_create(answer_objs, batch_size=1000)
+            answers = list(Answer.objects.order_by("-id")[:n_answers])
+            self.stdout.write(self.style.SUCCESS(f"Created {n_answers} answers"))
+
+            answer_votes = []
+            question_votes = []
+            for _ in range(n_votes):
+                if choice([True, False]):
+                    av = AnswerVote(
+                        answer=choice(answers),
+                        user=choice(users),
+                        up=(randint(1, 5) > 1),
+                    )
+                    answer_votes.append(av)
+                else:
+                    qv = QuestionVote(
+                        question=choice(questions),
+                        user=choice(users),
+                        up=(randint(1, 5) > 1),
+                    )
+                    question_votes.append(qv)
+
+            AnswerVote.objects.bulk_create(
+                answer_votes, ignore_conflicts=True, batch_size=2000
+            )
+            QuestionVote.objects.bulk_create(
+                question_votes, ignore_conflicts=True, batch_size=2000
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Created {len(answer_votes) + len(question_votes)} votes"
+                )
+            )
+
+            through = Question.tags.through
+            through_objs = []
+            for q in questions:
+                chosen = choices(tags, k=randint(1, 4))
+                for t in chosen:
+                    through_objs.append(through(question_id=q.id, tag_id=t.id))
+            through.objects.bulk_create(
+                through_objs, ignore_conflicts=True, batch_size=2000
+            )
+
+            answer_votes_agg = AnswerVote.objects.values("answer").annotate(
+                rating=Sum(
+                    Case(
+                        When(up=True, then=Value(1)),
+                        When(up=False, then=Value(-1)),
+                        output_field=IntegerField(),
+                    )
+                )
+            )
+            answer_rating_map = {
+                item["answer"]: item["rating"] or 0 for item in answer_votes_agg
+            }
+
+            for a in answers:
+                a.rating = answer_rating_map.get(a.id, 0)
+            Answer.objects.bulk_update(answers, ["rating"], batch_size=1000)
+
+            qvotes_agg = QuestionVote.objects.values("question").annotate(
+                rating=Sum(
+                    Case(
+                        When(up=True, then=Value(1)),
+                        When(up=False, then=Value(-1)),
+                        output_field=IntegerField(),
+                    )
+                )
+            )
+            qvote_map = {item["question"]: item["rating"] or 0 for item in qvotes_agg}
+
+            answer_sum_by_question = Answer.objects.values("question").annotate(
+                sum_rating=Sum("rating")
+            )
+            ans_sum_map = {
+                item["question"]: item["sum_rating"] or 0
+                for item in answer_sum_by_question
+            }
+
+            questions_to_update = []
+            for q in questions:
+                q.rating = qvote_map.get(q.id, 0) + ans_sum_map.get(q.id, 0)
+                questions_to_update.append(q)
+            Question.objects.bulk_update(
+                questions_to_update, ["rating"], batch_size=1000
+            )
+
+            q_by_user = Question.objects.values("author").annotate(
+                sum_rating=Sum("rating")
+            )
+            a_by_user = Answer.objects.values("author").annotate(
+                sum_rating=Sum("rating")
+            )
+
+            user_rating_map = {}
+            for item in q_by_user:
+                user_rating_map[item["author"]] = user_rating_map.get(
+                    item["author"], 0
+                ) + (item["sum_rating"] or 0)
+            for item in a_by_user:
+                user_rating_map[item["author"]] = user_rating_map.get(
+                    item["author"], 0
+                ) + (item["sum_rating"] or 0)
+
+            for u in users:
+                u.rating = user_rating_map.get(u.id, 0)
+            User.objects.bulk_update(users, ["rating"], batch_size=500)
+
+            self.stdout.write(
+                self.style.SUCCESS("Tagged and rated all questions, answers and users")
+            )
+
+        self.stdout.write(
+            self.style.SUCCESS(f"Successfully filled db with ratio of {ratio}")
         )
