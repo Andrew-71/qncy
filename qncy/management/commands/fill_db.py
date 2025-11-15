@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from qncy.models import Question, User, Tag, Answer, AnswerVote, QuestionVote
 from django.db import IntegrityError
 

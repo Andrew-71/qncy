@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from qncy.models import *
+from qncy.models import Question, Answer, QuestionVote, AnswerVote, Tag
 
 class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['title','content']

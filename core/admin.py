@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from core.models import *
+from core.models import User
 
 # Enormous crutch just to save profile pictures
 class CustomUserAdmin(UserAdmin):
