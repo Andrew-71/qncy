@@ -37,10 +37,10 @@ class QuestionManager(models.Manager):
 class Question(models.Model):
     objects = QuestionManager()
 
-    # StackOverflow appears to have this as limit via
+    # StackOverflow appears to have these as limits via
     # https://meta.stackexchange.com/questions/176445/
     title = models.CharField(max_length=150)
-    content = models.TextField()
+    content = models.TextField(max_length=30000)
     author = models.ForeignKey(
         "core.User", on_delete=models.CASCADE, related_name="questions"
     )
@@ -106,7 +106,7 @@ class Answer(models.Model):
     question = models.ForeignKey(
         "qncy.Question", on_delete=models.CASCADE, related_name="question_answer"
     )
-    content = models.TextField()
+    content = models.TextField(max_length=30000)
     author = models.ForeignKey("core.User", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
@@ -128,7 +128,7 @@ class Answer(models.Model):
         self.author.update_rating()
         self.save()
 
-    def accept(self, user: User):
+    def accept(self):
         answer_accepted = Answer.objects.filter(question=self.question, accepted=True)
         if answer_accepted.exists():
             answer_accepted = answer_accepted.get()

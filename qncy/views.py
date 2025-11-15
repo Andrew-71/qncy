@@ -105,7 +105,7 @@ def vote_answer(request, answer_id):
         if request.POST.get("accept") is not None:
             if request.user != answer.question.author:
                 raise PermissionDenied()
-            answer.accept(request.user)
+            answer.accept()
             return HttpResponseRedirect(next)
         up = True
         if request.POST.get("up") is not None:
