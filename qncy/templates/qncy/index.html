@@ -1,0 +1,20 @@
+{% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'qncy/css/question.css' %}">
+{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="heading">
+    {% block heading %}
+    <h1>New questions</h1>
+    <a href="{% url 'qncy:hot' %}">trending questions</a>
+    {% endblock %}
+</div>
+
+{% include "qncy/question_list.html" %} 
+
+{% endblock %}

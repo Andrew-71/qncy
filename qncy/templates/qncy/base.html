@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en-UK">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="{% static 'core/favicon.ico' %}">
+  <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+  {% block head %}{% endblock head %}
+  <title>{% block title %}{% endblock title %} - QNCY</title>
+</head>
+<body>
+    <header>
+    <nav>
+        <ul>
+            <li><a href="/" class="logo">QNCY</a></li>
+            <li>
+                <form role="search" id="search" class="search" action="/search">
+                    <input placeholder="Search">
+                </form>
+            </li>
+            <li><a href="{% url 'qncy:ask' %}" class="ask">ask!</a></li>
+            {% if user.is_authenticated %}
+            <li class="profile-container">
+                {% if user.pfp %}<img src="{{ user.pfp.url }}">{% endif %}
+                <div class="profile">{{ user.username }} <span><a href="{% url 'core:settings' %}">settings</a>
+                <form method="post" action="{% url 'core:logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-button" type="submit">logout</button>
+                </form>
+            </span></div>
+            </li>
+            {% else %}
+            <li><a href="/login">log in</a></li>
+            <li><a href="/register">register</a></li>
+            {% endif %}
+            
+        </ul>
+    </nav>
+    <hr>
+    </header>
+    <div class="container">
+        <section class="mainbar">
+            {% block content %}{% endblock content %}
+        </section>
+        {% include "qncy/sidebar.html" %} 
+    </div>
+</body>
+</html>
