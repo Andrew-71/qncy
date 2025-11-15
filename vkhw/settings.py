@@ -74,21 +74,30 @@ WSGI_APPLICATION = 'vkhw.wsgi.application'
 
 # Database
 
-DATABASE_USER = os.environ.get("QNCY_DB_USER", '')
-DATABASE_PASSWORD = os.environ.get("QNCY_DB_PASSWORD", '')
-DATABASE_URI = os.environ.get("QNCY_DB_URI", '')
-DATABASE_PORT = os.environ.get("QNCY_DB_PORT", '')
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "postgres",
-        "USER": DATABASE_USER,
-        "PASSWORD": DATABASE_PASSWORD,
-        "HOST": DATABASE_URI,  # set in docker-compose.yml
-        "PORT": DATABASE_PORT,  # default postgres port
+        "ENGINE": "django.db.backends.sqlite3",
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+if os.environ.get("QNCY_DB_BACKEND", "").lower() == "postgresql":
+    DATABASE_USER = os.environ.get("QNCY_DB_USER", '')
+    DATABASE_PASSWORD = os.environ.get("QNCY_DB_PASSWORD", '')
+    DATABASE_URI = os.environ.get("QNCY_DB_URI", '')
+    DATABASE_PORT = os.environ.get("QNCY_DB_PORT", '')
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "postgres",
+            "USER": DATABASE_USER,
+            "PASSWORD": DATABASE_PASSWORD,
+            "HOST": DATABASE_URI,  # set in docker-compose.yml
+            "PORT": DATABASE_PORT,  # default postgres port
+        }
+    }
 
 
 # Password validation

@@ -9,6 +9,7 @@ services:
     depends_on:
       - db
     environment:
+      - QNCY_DB_BACKEND=postgresql
       - QNCY_DB_USER=postgres
       - QNCY_DB_PASSWORD=postgres
       - QNCY_DB_URI=db
