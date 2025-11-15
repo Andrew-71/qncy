@@ -9,7 +9,6 @@ urlpatterns = [
     path("ask", views.ask, name="ask"),
     path("question/<int:question_id>/", views.question, name="question"),
     path("tagged/<tag_name>/", views.tagged, name="tagged"),
-
     path("vote/q/<int:question_id>/", views.vote_question, name="vote_question"),
     path("vote/a/<int:answer_id>/", views.vote_answer, name="vote_answer"),
 ]
