@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum, Case, When, IntegerField
+from django.db.models import Sum, Case, When, IntegerField, Count
 
 from core.models import User
 
@@ -13,6 +13,15 @@ class Tag(models.Model):
 
 
 class QuestionManager(models.Manager):
+    def get_queryset(self):
+        return (
+            super()
+            .get_queryset()
+            .select_related("author")
+            .annotate(answer_count=Count("question_answer"))
+            .prefetch_related("tags")
+        )
+
     def get_new(self):
         return self.order_by("-created_at")
 
@@ -83,6 +92,9 @@ class Question(models.Model):
 
 
 class AnswerManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().select_related("author")
+
     def for_question(self, question):
         return self.filter(question=question).order_by("-accepted", "-rating")
 
