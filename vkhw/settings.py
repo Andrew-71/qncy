@@ -73,16 +73,20 @@ WSGI_APPLICATION = 'vkhw.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+
+DATABASE_USER = os.environ.get("QNCY_DB_USER", '')
+DATABASE_PASSWORD = os.environ.get("QNCY_DB_PASSWORD", '')
+DATABASE_URI = os.environ.get("QNCY_DB_URI", '')
+DATABASE_PORT = os.environ.get("QNCY_DB_PORT", '')
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "db",  # set in docker-compose.yml
-        "PORT": 5432,  # default postgres port
+        "USER": DATABASE_USER,
+        "PASSWORD": DATABASE_PASSWORD,
+        "HOST": DATABASE_URI,  # set in docker-compose.yml
+        "PORT": DATABASE_PORT,  # default postgres port
     }
 }
 

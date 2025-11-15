@@ -8,6 +8,11 @@ services:
       - 8000:8000
     depends_on:
       - db
+    environment:
+      - QNCY_DB_USER=postgres
+      - QNCY_DB_PASSWORD=postgres
+      - QNCY_DB_URI=db
+      - QNCY_DATABASE_PORT=5432
   db:
     image: postgres:14
     volumes:
