@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Count
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.core.exceptions import PermissionDenied
 
 from core.models import User
 
@@ -111,6 +112,8 @@ def vote_answer(request, answer_id):
         next = request.POST.get('next', '/')
         answer = get_object_or_404(Answer, id=answer_id)
         if request.POST.get("accept") is not None:
+            if request.user != answer.question.author:
+                raise PermissionDenied()
             answer.accept(request.user)
             return HttpResponseRedirect(next)
         up = True

@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models import Sum, Case, When, IntegerField
-from django.core.exceptions import PermissionDenied
 
 from core.models import User
 
@@ -102,9 +101,7 @@ class Answer(models.Model):
         self.author.update_rating()
         self.save()
 
-    def accept(self, user: User):
-        if user != self.question.author:
-            raise PermissionDenied()
+    def accept(self, user: User): 
         answer_accepted = Answer.objects.filter(question=self.question,accepted=True)
         if answer_accepted.exists():
             answer_accepted = answer_accepted.get()
