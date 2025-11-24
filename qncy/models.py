@@ -62,7 +62,7 @@ class Question(models.Model):
             or 0
         )
         self.author.update_rating()
-        self.save()
+        self.save(update_fields=["rating"])
 
     def answers(self):
         return self.question_answer.all().count()
@@ -126,7 +126,7 @@ class Answer(models.Model):
             or 0
         )
         self.author.update_rating()
-        self.save()
+        self.save(update_fields=["rating"])
 
     def accept(self):
         answer_accepted = Answer.objects.filter(question=self.question, accepted=True)
@@ -171,7 +171,7 @@ class QuestionVote(models.Model):
     user = models.ForeignKey(
         "core.User", on_delete=models.CASCADE, related_name="question_vote"
     )
-    up = models.BooleanField(blank=False, default=True)
+    up = models.BooleanField(blank=False, default=True, verbose_name="voted up")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -193,7 +193,7 @@ class AnswerVote(models.Model):
     user = models.ForeignKey(
         "core.User", on_delete=models.CASCADE, related_name="answer_vote"
     )
-    up = models.BooleanField(blank=False, default=True)
+    up = models.BooleanField(blank=False, default=True, verbose_name="voted up")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

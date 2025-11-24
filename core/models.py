@@ -40,4 +40,4 @@ class User(AbstractUser):
             or 0
         )
         self.rating = q_score + a_score
-        self.save()
+        self.save(update_fields=["rating"])
