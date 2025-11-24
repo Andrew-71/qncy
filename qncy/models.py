@@ -18,7 +18,7 @@ class QuestionManager(models.Manager):
             super()
             .get_queryset()
             .select_related("author")
-            .annotate(answer_count=Count("question_answer"))
+            .annotate(answer_count=Count("answers"))
             .prefetch_related("tags")
         )
 
@@ -50,7 +50,7 @@ class Question(models.Model):
 
     def update_rating(self):
         self.rating = (
-            self.question_vote.aggregate(
+            self.votes.aggregate(
                 score=Sum(
                     Case(
                         When(up=True, then=1),
@@ -64,28 +64,22 @@ class Question(models.Model):
         self.author.update_rating()
         self.save(update_fields=["rating"])
 
-    def answers(self):
-        return self.question_answer.all().count()
+    def clear_vote(self, user: User):
+        vote = QuestionVote.objects.filter(question=self, user=user)
+        if vote.exists():
+            vote.delete()
+            self.update_rating()
 
     def vote(self, user: User, up: bool):
-        vote_old = QuestionVote.objects.filter(question=self, user=user)
-        vote = QuestionVote(user=user, question=self)
-        existing = False
-        if vote_old.exists():
-            vote = vote_old.get()
-            existing = True
-        if existing and vote.up and up:
-            vote.delete()
-            self.update_rating()
-            return
-        elif existing and not vote.up and not up:
-            vote.delete()
-            self.update_rating()
-            return
+        vote = QuestionVote.objects.filter(question=self, user=user)
+        if vote.exists():
+            vote = vote.get()
+        else:
+            vote = QuestionVote(user=user, question=self)
+
         vote.up = up
         vote.save()
         self.update_rating()
-        return
 
     def __str__(self):
         return self.title
@@ -104,7 +98,7 @@ class Answer(models.Model):
     objects = AnswerManager()
 
     question = models.ForeignKey(
-        "qncy.Question", on_delete=models.CASCADE, related_name="question_answer"
+        "qncy.Question", on_delete=models.CASCADE, related_name="answers"
     )
     content = models.TextField(max_length=30000)
     author = models.ForeignKey("core.User", on_delete=models.CASCADE)
@@ -114,7 +108,7 @@ class Answer(models.Model):
 
     def update_rating(self):
         self.rating = (
-            self.answer_vote.aggregate(
+            self.votes.aggregate(
                 score=Sum(
                     Case(
                         When(up=True, then=1),
@@ -128,32 +122,31 @@ class Answer(models.Model):
         self.author.update_rating()
         self.save(update_fields=["rating"])
 
+    def clear_accept(self):
+        self.accepted = False
+        self.save(update_fields=["accepted"])
+
     def accept(self):
         answer_accepted = Answer.objects.filter(question=self.question, accepted=True)
         if answer_accepted.exists():
             answer_accepted = answer_accepted.get()
             answer_accepted.accepted = False
-            answer_accepted.save()
-            if answer_accepted == self:
-                return
+            answer_accepted.save(update_fields=["accepted"])
         self.accepted = True
         self.save()
 
+    def clear_vote(self, user: User):
+        vote = AnswerVote.objects.filter(answer=self, user=user)
+        if vote.exists():
+            vote.delete()
+            self.update_rating()
+
     def vote(self, user: User, up: bool):
-        vote_old = AnswerVote.objects.filter(answer=self, user=user)
-        vote = AnswerVote(user=user, answer=self)
-        existing = False
-        if vote_old.exists():
-            vote = vote_old.get()
-            existing = True
-        if existing and vote.up and up:
-            vote.delete()
-            self.update_rating()
-            return
-        elif existing and not vote.up and not up:
-            vote.delete()
-            self.update_rating()
-            return
+        vote = AnswerVote.objects.filter(answer=self, user=user)
+        if vote.exists():
+            vote = vote.get()
+        else:
+            vote = AnswerVote(user=user, answer=self)
         vote.up = up
         vote.save()
         self.update_rating()
@@ -165,7 +158,7 @@ class Answer(models.Model):
 
 class QuestionVote(models.Model):
     question = models.ForeignKey(
-        "qncy.Question", on_delete=models.CASCADE, related_name="question_vote"
+        "qncy.Question", on_delete=models.CASCADE, related_name="votes"
     )
 
     user = models.ForeignKey(
@@ -187,7 +180,7 @@ class QuestionVote(models.Model):
 
 class AnswerVote(models.Model):
     answer = models.ForeignKey(
-        "qncy.Answer", on_delete=models.CASCADE, related_name="answer_vote"
+        "qncy.Answer", on_delete=models.CASCADE, related_name="votes"
     )
 
     user = models.ForeignKey(

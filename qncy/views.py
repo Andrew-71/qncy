@@ -84,14 +84,14 @@ def ask(request):
 def vote_question(request, question_id):
     if request.method == "POST":
         question = get_object_or_404(Question, id=question_id)
-        up = True
-        if request.POST.get("up") is not None:
-            up = True
+        if request.POST.get("clear") is not None:
+            question.clear_vote(request.user)
+        elif request.POST.get("up") is not None:
+            question.vote(request.user, True)
         elif request.POST.get("down") is not None:
-            up = False
+            question.vote(request.user, False)
         else:
             return HttpResponseBadRequest()
-        question.vote(request.user, up)
         next = request.POST.get("next", "/")
         return HttpResponseRedirect(next)
     return redirect("qncy:index")
@@ -102,18 +102,32 @@ def vote_answer(request, answer_id):
     if request.method == "POST":
         next = request.POST.get("next", "/")
         answer = get_object_or_404(Answer, id=answer_id)
-        if request.POST.get("accept") is not None:
-            if request.user != answer.question.author:
-                raise PermissionDenied()
-            answer.accept()
-            return HttpResponseRedirect(next)
-        up = True
-        if request.POST.get("up") is not None:
-            up = True
+        if request.POST.get("clear") is not None:
+            answer.clear_vote(request.user)
+        elif request.POST.get("up") is not None:
+            answer.vote(request.user, True)
         elif request.POST.get("down") is not None:
-            up = False
+            answer.vote(request.user, False)
         else:
             return HttpResponseBadRequest()
-        answer.vote(request.user, up)
+
+        return HttpResponseRedirect(next)
+    return redirect("qncy:index")
+
+
+@login_required
+def accept_answer(request, answer_id):
+    if request.method == "POST":
+        next = request.POST.get("next", "/")
+        answer = get_object_or_404(Answer, id=answer_id)
+        if request.user != answer.question.author:
+            raise PermissionDenied()
+        if request.POST.get("clear") is not None:
+            answer.clear_accept()
+        elif request.POST.get("accept") is not None:
+            answer.accept()
+        else:
+            return HttpResponseBadRequest()
+
         return HttpResponseRedirect(next)
     return redirect("qncy:index")

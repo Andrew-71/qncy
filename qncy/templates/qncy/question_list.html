@@ -1,13 +1,10 @@
+{% load qncy_voting %}
 {% if page_obj %}
     {% for question in page_obj %}
         <div class="card">
             <form action="{% url 'qncy:vote_question' question.id %}" method="post">
                 {% csrf_token %}
-                <div class="card-score">
-                    <button type="submit" name="up"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 12h16L9 4z"></path></svg></button>
-                    {{ question.rating }}
-                    <button type="submit" name="down"><svg aria-hidden="true"width="18" height="18" viewBox="0 0 18 18"><path d="M1 6h16l-8 8z"></path></svg></button>
-                </div>
+                <div class="card-score">{% vote question user %}</div>
                 <input type="hidden" name="next" value="{{ request.path }}">
             </form>
             <div class="card-info">
