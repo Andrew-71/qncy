@@ -79,3 +79,7 @@ form > div:has(input[type=checkbox]) > label:first-child {
 .answer-form {
     margin-top: 20px;
 }
+
+form img {
+    max-width: 128px;
+}
