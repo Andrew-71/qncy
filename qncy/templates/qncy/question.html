@@ -21,7 +21,7 @@
     <div class="card-info">
         <p>{{ question.content }}</p>
         <div class="card-footer">
-            <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="#">{{ question.author.username }}</a></span>
+            <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="{% url 'qncy:user_profile' question.author.username %}">{{ question.author.username }}</a></span>
             {% if question.tags.count %}
                 <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
             {% endif %}
@@ -53,7 +53,7 @@
             <div class="card-info">
                 <p>{{ answer.content }}</p>
                 <div class="card-footer">
-                    <span>Answer by {% if answer.author.pfp %}<img src="{{ answer.author.pfp.url }}">{% endif %} <a href="#">{{ answer.author.username }}</a></span>
+                    <span>Answer by {% if answer.author.pfp %}<img src="{{ answer.author.pfp.url }}">{% endif %} <a href="{% url 'qncy:user_profile' answer.author.username %}">{{ answer.author.username }}</a></span>
                 </div>
             </div>
         </div>

@@ -32,6 +32,9 @@ class QuestionManager(models.Manager):
     def get_tagged(self, tag):
         return self.filter(tags=tag).order_by("-created_at")
 
+    def get_by(self, user):
+        return self.filter(author=user).order_by("-created_at")
+
 
 # Question: title, content, author, creation date, tags, rating
 class Question(models.Model):

@@ -11,7 +11,7 @@
                 <h2 class="card-title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
                 <p>{{ question.content | truncatechars:200}}</p>
                 <div class="card-footer">
-                    <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="#">{{ question.author.username }}</a>. <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answer_count }})</a></span>
+                    <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="{% url 'qncy:user_profile' question.author.username %}">{{ question.author.username }}</a>. <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answer_count }})</a></span>
                     {% if question.tags.count %}
                     <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
                     {% endif %}

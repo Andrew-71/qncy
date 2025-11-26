@@ -7,6 +7,8 @@ from django.core.exceptions import PermissionDenied
 from qncy.models import Question, Tag, Answer
 from qncy.forms import QuestionForm, AnswerForm
 
+from core.models import User
+
 
 def paginator_page(request, objects):
     # There's probably a more pythonistic way to do this
@@ -38,6 +40,16 @@ def hot(request):
         "page_obj": paginator_page(request, hot_questions),
     }
     return render(request, "qncy/hot.html", context)
+
+
+def by_user(request, user_name):
+    author = get_object_or_404(User, username=user_name)
+    questions = Question.objects.get_by(author)
+    context = {
+        "page_obj": paginator_page(request, questions),
+        "author": author,
+    }
+    return render(request, "qncy/profile.html", context)
 
 
 def question(request, question_id):
