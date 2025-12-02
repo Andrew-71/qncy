@@ -9,12 +9,16 @@ register = template.Library()
 def vote(submission: Question | Answer, user):
     # This unfortunately increases SQL Queries by a bit.
     # I don't know how to remove this for now...
-    vote = submission.votes.filter(user=user)
-    up = True
-    if vote.exists():
-        up = vote.get().up
+    exists = False
+    up = False
+    if user.is_authenticated:
+        vote = submission.votes.filter(user=user)
+        up = True
+        if vote.exists():
+            exists = True
+            up = vote.get().up
     return {
-        "exists": vote.exists(),
+        "exists": exists,
         "up": up,
         "submission": submission,
     }
