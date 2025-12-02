@@ -35,6 +35,17 @@
     background-color: var(--rain);
     cursor: pointer;
 }
+.card-score .active {
+    background-color: var(--soft-lavender);
+}
+.card-score .active:hover {
+    background-color: var(--lavender);
+}
+.card-score form {
+    flex-flow: inherit;
+    align-items: inherit;
+    gap: inherit;
+}
 .card-info {
     padding: 0;
     margin: 0;

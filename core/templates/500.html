@@ -1,0 +1,17 @@
+{% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'qncy/css/question.css' %}">
+{% endblock %}
+
+{% block title %}Internal Error{% endblock %}
+
+{% block content %}
+<div class="heading">
+    <h1>Internal server error</h1>
+</div>
+
+<p>Through no fault of your own, the server has experienced a failure.</p>
+
+{% endblock %}

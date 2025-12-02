@@ -1,0 +1,17 @@
+{% extends "qncy/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'qncy/css/question.css' %}">
+{% endblock %}
+
+{% block title %}Bad Request{% endblock %}
+
+{% block content %}
+<div class="heading">
+    <h1>Bad Request</h1>
+</div>
+
+<p>Something about your request prevented the server from processing it.</p>
+
+{% endblock %}

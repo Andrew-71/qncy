@@ -1,0 +1,7 @@
+{% extends "qncy/index.html" %}
+
+{% block title %}Asked by {{ author }}{% endblock %}
+
+{% block heading %}
+<h1>Recent questions from <span style="text-decoration:underline">{{ author.username }}</span></h1>
+{% endblock %}
