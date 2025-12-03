@@ -18,6 +18,14 @@ Useful command: `pre-commit run --all-files`
 
 ## Deployment
 
+By default, the system starts with an SQLite3 database. This can be changed
+by populating the environment variables and more specifically setting
+`QNCY_DB_BACKEND=postgres`.
+
+To add mock user data, a management command `fill_db [ratio]` is present.
+
+### Docker
+
 If you have Docker installed and are fine with temporarily losing ~1.5gb of
 space, you can deploy a fully working instance of the app by running the
 following command:
