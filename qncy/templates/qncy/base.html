@@ -27,6 +27,7 @@
                 <div class="profile">{{ user.username }} <span><a href="{% url 'core:settings' %}">settings</a>
                 <form method="post" action="{% url 'core:logout' %}">
                     {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
                     <button class="logout-button" type="submit">logout</button>
                 </form>
             </span></div>

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.http import HttpResponseRedirect
 
 from core.models import User
 from core.forms import RegisterForm, SettingsForm
@@ -25,3 +27,10 @@ def settings(request):
         form.save()
         return redirect("qncy:index")
     return render(request, "registration/settings.html", {"form": form})
+
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    next = request.POST.get("next", "/")
+    return HttpResponseRedirect(next)
