@@ -1,5 +1,15 @@
 from django.db import models
-from django.db.models import Sum, Case, When, IntegerField, Count
+from django.db.models import (
+    Sum,
+    Case,
+    When,
+    IntegerField,
+    Count,
+    OuterRef,
+    Subquery,
+    Exists,
+    BooleanField,
+)
 from django.urls import reverse
 
 from core.models import User
@@ -23,18 +33,33 @@ class QuestionManager(models.Manager):
             .prefetch_related("tags")
         )
 
-    def get_new(self):
-        return self.order_by("-created_at")
+    def annotate_votes(self, questions, user):
+        if user.is_authenticated:
+            upvotedSubmissions = QuestionVote.objects.filter(
+                question=OuterRef("pk"), user=user
+            ).values("up")[:1]
+            questions = questions.annotate(
+                user_voted=Exists(
+                    QuestionVote.objects.filter(question=OuterRef("pk"), user=user)
+                ),
+                user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
+            )
+        return questions
 
-    def get_hot(self):
+    def get_new(self, user=None):
+        return self.annotate_votes(self.order_by("-created_at"), user)
+
+    def get_hot(self, user=None):
         # NOTE: Right now this is more of a "top". Add time cut-off?
-        return self.order_by("-rating", "-created_at")
+        return self.annotate_votes(self.order_by("-rating", "-created_at"), user)
 
-    def get_tagged(self, tag):
-        return self.filter(tags=tag).order_by("-created_at")
+    def get_tagged(self, tag, user=None):
+        return self.annotate_votes(self.filter(tags=tag).order_by("-created_at"), user)
 
     def get_by(self, user):
-        return self.filter(author=user).order_by("-created_at")
+        return self.annotate_votes(
+            self.filter(author=user).order_by("-created_at"), user
+        )
 
 
 # Question: title, content, author, creation date, tags, rating
@@ -96,8 +121,26 @@ class AnswerManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().select_related("author")
 
-    def for_question(self, question):
-        return self.filter(question=question).order_by("-accepted", "-rating")
+    def annotate_votes(self, answers, user):
+        if user.is_authenticated:
+            upvotedSubmissions = AnswerVote.objects.filter(
+                answer=OuterRef("pk"), user=user
+            ).values("up")[:1]
+            answers = answers.annotate(
+                user_voted=Exists(
+                    AnswerVote.objects.filter(answer=OuterRef("pk"), user=user)
+                ),
+                user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
+            )
+        return answers
+
+    def for_question(self, question, user=None):
+        return self.annotate_votes(
+            self.filter(question=question).order_by(
+                "-accepted", "-rating", "created_at"
+            ),
+            user,
+        )
 
 
 # Answer: content, author, creation date, accepted flag, rating

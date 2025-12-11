@@ -28,7 +28,7 @@ def paginator_page(request, objects):
 
 
 def index(request):
-    latest_questions = Question.objects.get_new()
+    latest_questions = Question.objects.get_new(request.user)
     context = {
         "page_obj": paginator_page(request, latest_questions),
     }
@@ -36,7 +36,7 @@ def index(request):
 
 
 def hot(request):
-    hot_questions = Question.objects.get_hot()
+    hot_questions = Question.objects.get_hot(request.user)
     context = {
         "page_obj": paginator_page(request, hot_questions),
     }
@@ -56,7 +56,7 @@ def by_user(request, user_name):
 def question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
-    answers_list = Answer.objects.for_question(question)
+    answers_list = Answer.objects.for_question(question, request.user)
     context = {
         "question": question,
         "page_obj": paginator_page(request, answers_list),
