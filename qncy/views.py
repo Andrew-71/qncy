@@ -28,17 +28,27 @@ def paginator_page(request, objects):
 
 
 def index(request):
-    latest_questions = Question.objects.get_new(request.user)
+    latest_questions = Question.objects.get_new()
+    page = paginator_page(request, latest_questions)
+    if request.user.is_authenticated:
+        page.object_list = Question.objects.annotate_votes(
+            page.object_list, request.user
+        )
     context = {
-        "page_obj": paginator_page(request, latest_questions),
+        "page_obj": page,
     }
     return render(request, "qncy/index.html", context)
 
 
 def hot(request):
-    hot_questions = Question.objects.get_hot(request.user)
+    hot_questions = Question.objects.get_hot()
+    page = paginator_page(request, hot_questions)
+    if request.user.is_authenticated:
+        page.object_list = Question.objects.annotate_votes(
+            page.object_list, request.user
+        )
     context = {
-        "page_obj": paginator_page(request, hot_questions),
+        "page_obj": page,
     }
     return render(request, "qncy/hot.html", context)
 
@@ -46,8 +56,13 @@ def hot(request):
 def by_user(request, user_name):
     author = get_object_or_404(User, username=user_name)
     questions = Question.objects.get_by(author)
+    page = paginator_page(request, questions)
+    if request.user.is_authenticated:
+        page.object_list = Question.objects.annotate_votes(
+            page.object_list, request.user
+        )
     context = {
-        "page_obj": paginator_page(request, questions),
+        "page_obj": page,
         "author": author,
     }
     return render(request, "qncy/profile.html", context)
@@ -56,10 +71,13 @@ def by_user(request, user_name):
 def question(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
-    answers_list = Answer.objects.for_question(question, request.user)
+    answers_list = Answer.objects.for_question(question)
+    page = paginator_page(request, answers_list)
+    if request.user.is_authenticated:
+        page.object_list = Answer.objects.annotate_votes(page.object_list, request.user)
     context = {
         "question": question,
-        "page_obj": paginator_page(request, answers_list),
+        "page_obj": page,
     }
 
     if request.user.is_authenticated:
@@ -76,9 +94,14 @@ def question(request, question_id):
 def tagged(request, tag_name):
     tag = get_object_or_404(Tag, name=tag_name)
     tagged_questions = Question.objects.get_tagged(tag)
+    page = paginator_page(request, tagged_questions)
+    if request.user.is_authenticated:
+        page.object_list = Question.objects.annotate_votes(
+            page.object_list, request.user
+        )
     context = {
         "tag": tag,
-        "page_obj": paginator_page(request, tagged_questions),
+        "page_obj": page,
     }
     return render(request, "qncy/tagged.html", context)
 
@@ -154,8 +177,10 @@ def accept_answer(request, answer_id):
             return HttpResponseBadRequest()
 
         answers_list = Answer.objects.for_question(answer.question)
+        page = paginator_page(request, answers_list)
+        page.object_list = Answer.objects.annotate_votes(page.object_list, request.user)
         context = {
-            "page_obj": paginator_page(request, answers_list),
+            "page_obj": page,
             "question": answer.question,
         }
         html = render_to_string("qncy/answer_list.html", context, request=request)
