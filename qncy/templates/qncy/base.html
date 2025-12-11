@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="{% static 'core/favicon.ico' %}">
   <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/form.css' %}">
+  <!-- TODO: consider self-hosting HTMX on my server? -->
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
   {% block head %}{% endblock head %}
   <title>{% block title %}{% endblock title %} - QNCY</title>
 </head>

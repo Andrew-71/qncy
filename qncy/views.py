@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.core.exceptions import PermissionDenied
 
 from qncy.models import Question, Tag, Answer
@@ -96,41 +97,52 @@ def ask(request):
 def vote_question(request, question_id):
     if request.method == "POST":
         question = get_object_or_404(Question, id=question_id)
+        exists = False
+        up = True
         if request.POST.get("clear") is not None:
             question.clear_vote(request.user)
         elif request.POST.get("up") is not None:
             question.vote(request.user, True)
+            exists = True
         elif request.POST.get("down") is not None:
             question.vote(request.user, False)
+            exists = True
+            up = False
         else:
             return HttpResponseBadRequest()
-        next = request.POST.get("next", "/")
-        return HttpResponseRedirect(next)
+        context = {"submission": question, "exists": exists, "up": up}
+        html = render_to_string("qncy/voting.html", context, request=request)
+        return HttpResponse(html)
     return redirect("qncy:index")
 
 
 @login_required
 def vote_answer(request, answer_id):
     if request.method == "POST":
-        next = request.POST.get("next", "/")
         answer = get_object_or_404(Answer, id=answer_id)
+        exists = False
+        up = True
         if request.POST.get("clear") is not None:
             answer.clear_vote(request.user)
         elif request.POST.get("up") is not None:
             answer.vote(request.user, True)
+            exists = True
         elif request.POST.get("down") is not None:
             answer.vote(request.user, False)
+            exists = True
+            up = False
         else:
             return HttpResponseBadRequest()
 
-        return HttpResponseRedirect(next)
+        context = {"submission": answer, "exists": exists, "up": up}
+        html = render_to_string("qncy/voting.html", context, request=request)
+        return HttpResponse(html)
     return redirect("qncy:index")
 
 
 @login_required
 def accept_answer(request, answer_id):
     if request.method == "POST":
-        next = request.POST.get("next", "/")
         answer = get_object_or_404(Answer, id=answer_id)
         if request.user != answer.question.author:
             raise PermissionDenied()
@@ -141,5 +153,11 @@ def accept_answer(request, answer_id):
         else:
             return HttpResponseBadRequest()
 
-        return HttpResponseRedirect(next)
+        answers_list = Answer.objects.for_question(answer.question)
+        context = {
+            "page_obj": paginator_page(request, answers_list),
+            "question": answer.question,
+        }
+        html = render_to_string("qncy/answer_list.html", context, request=request)
+        return HttpResponse(html)
     return redirect("qncy:index")

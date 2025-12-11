@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Sum, Case, When, IntegerField, Count
+from django.urls import reverse
 
 from core.models import User
 
@@ -84,6 +85,9 @@ class Question(models.Model):
         vote.save()
         self.update_rating()
 
+    def voting_url(self):
+        return reverse("qncy:vote_question", args=[self.id])
+
     def __str__(self):
         return self.title
 
@@ -154,6 +158,9 @@ class Answer(models.Model):
         vote.save()
         self.update_rating()
         return
+
+    def voting_url(self):
+        return reverse("qncy:vote_answer", args=[self.id])
 
     def __str__(self):
         return self.author.username + " - " + self.question.title
