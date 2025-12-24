@@ -10,22 +10,24 @@ from core.forms import RegisterForm, SettingsForm
 
 def register(request):
     user = User()
-    form = RegisterForm(request.POST or None, request.FILES or None, instance=user)
-    if form.is_valid():
-        form.save()
-        login(request, user)
-        return redirect("qncy:index")
+    form = RegisterForm()
+    if request.method == "POST":
+        form = RegisterForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            login(request, user)
+            return redirect("qncy:index")
     return render(request, "registration/register.html", {"form": form})
 
 
 @login_required
 def settings(request):
-    form = SettingsForm(
-        request.POST or None, request.FILES or None, instance=request.user
-    )
-    if form.is_valid():
-        form.save()
-        return redirect("qncy:index")
+    form = SettingsForm(instance=request.user)
+    if request.method == "POST":
+        form = SettingsForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("qncy:index")
     return render(request, "registration/settings.html", {"form": form})
 
 

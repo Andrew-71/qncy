@@ -82,10 +82,12 @@ def question(request, question_id):
 
     if request.user.is_authenticated:
         answer = Answer(question=question, author=request.user)
-        form = AnswerForm(request.POST or None, request.FILES or None, instance=answer)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(request.path_info)
+        form = AnswerForm(instance=answer)
+        if request.method == "POST":
+            form = AnswerForm(request.POST, request.FILES, instance=answer)
+            if form.is_valid():
+                form.save()
+                return HttpResponseRedirect(request.path_info)
         context["form"] = form
 
     return render(request, "qncy/question.html", context)
@@ -109,10 +111,12 @@ def tagged(request, tag_name):
 @login_required
 def ask(request):
     question = Question(author=request.user)
-    form = QuestionForm(request.POST or None, request.FILES or None, instance=question)
-    if form.is_valid():
-        form.save()
-        return redirect("qncy:question", question_id=question.id)
+    form = QuestionForm(instance=question)
+    if request.method == "POST":
+        form = QuestionForm(request.POST, request.FILES, instance=question)
+        if form.is_valid():
+            form.save()
+            return redirect("qncy:question", question_id=question.id)
     return render(request, "qncy/ask.html", {"form": form})
 
 
