@@ -19,6 +19,9 @@ from core.models import User
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True, blank=False)
 
+    def url_name(self):
+        return self.name.replace(" ", "+")
+
     def __str__(self):
         return self.name
 

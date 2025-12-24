@@ -7,10 +7,15 @@ from django.core.exceptions import ValidationError
 def validate_tag_list(value):
     values = value.split(",")
     if len(values) > 5:
-        raise ValidationError("You cannot apply more than 5 tags")
+        raise ValidationError("Cannot apply more than 5 tags")
     for val in values:
         if len(val.strip()) == 0:
             raise ValidationError("Some items on the list have length of zero.")
+
+
+def validate_tag_plus(value):
+    if "+" in value:
+        raise ValidationError("Symbol '+' is not allowed in tags")
 
 
 class QuestionForm(forms.ModelForm):
@@ -23,7 +28,7 @@ class QuestionForm(forms.ModelForm):
 
     tags = forms.CharField(
         required=False,
-        validators=[validate_tag_list],
+        validators=[validate_tag_list, validate_tag_plus],
         help_text="Input comma-separated tags.",
         label="tags",
     )

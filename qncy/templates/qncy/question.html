@@ -18,7 +18,7 @@
         <div class="card-footer">
             <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="{% url 'qncy:user_profile' question.author.username %}">{{ question.author.username }}</a></span>
             {% if question.tags.count %}
-                <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
+                <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.url_name %}">{{ tag.name }}</a> {% endfor %}</span>
             {% endif %}
         </div>
     </div>

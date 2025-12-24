@@ -94,6 +94,7 @@ def question(request, question_id):
 
 
 def tagged(request, tag_name):
+    tag_name = tag_name.replace("+", " ")
     tag = get_object_or_404(Tag, name=tag_name)
     tagged_questions = Question.objects.get_tagged(tag)
     page = paginator_page(request, tagged_questions)
