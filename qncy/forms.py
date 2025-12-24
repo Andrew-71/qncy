@@ -1,7 +1,7 @@
 from django import forms
+from django.core.exceptions import ValidationError
 
 from qncy.models import Question, Answer, Tag
-from django.core.exceptions import ValidationError
 
 
 def validate_tag_list(value):

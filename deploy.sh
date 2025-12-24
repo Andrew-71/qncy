@@ -1,6 +1,6 @@
-docker build .
-docker compose up -d
-sleep 2
-docker exec vk-web-web-1 python manage.py makemigrations
-docker exec vk-web-web-1 python manage.py migrate
-docker exec vk-web-web-1 python manage.py fill_db 25
+rm db.sqlite3
+python manage.py migrate
+python manage.py fill_db 1000
+python manage.py createcachetable
+python manage.py generate_sidebar
+python manage.py runserver

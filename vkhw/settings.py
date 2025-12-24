@@ -77,6 +77,13 @@ if os.environ.get("QNCY_DB_BACKEND", "").lower() == "postgresql":
         }
     }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cache_table",
+    }
+}
+
 SECRET_KEY = os.environ.get(
     "QNCY_SECRET_KEY",
     "django-insecure-2m+6o#ejpm3xnhekvbj()zjy^3gmxhw(wxgip3p1vcyn56a-8x",
