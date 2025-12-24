@@ -191,11 +191,6 @@ header .search input {
     width: 100%;
     font-family: Arial, Helvetica, sans-serif;
 }
-@media (max-width: 550px) {
-    header form {
-        display: none;
-    }
-}
 header hr {
     display: none;
 }
@@ -244,4 +239,57 @@ header hr {
     align-items: center;
     gap: 20px;
     margin-bottom: -10px; /* The expedition is getting desperate */
+}
+
+.search-results {
+    position: absolute;
+    top: 70px;
+    max-width: 480px;
+    background-color: var(--clear-sky);
+    border: 1px solid var(--pour);
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    z-index: 1000;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.search-results:empty {
+    display: none;
+}
+
+.search-result a {
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--drizzle);
+}
+
+.search-result a:hover {
+    text-decoration: none;
+    background-color: var(--drizzle);
+    transition: background-color 0.2s ease;
+}
+
+.result-title {
+    font-weight: 600;
+    color: var(--starry-night);
+    margin-bottom: 6px;
+}
+
+.result-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 0.85em;
+    color: var(--black-lavender);
+}
+
+@media (max-width: 550px) {
+    header form {
+        display: none;
+    }
+    .search-results {
+        display: none;
+    }
 }
