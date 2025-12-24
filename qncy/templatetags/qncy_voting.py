@@ -16,4 +16,5 @@ def vote(submission: Question | Answer, user):
         "exists": exists,
         "up": up,
         "submission": submission,
+        "user": user,
     }
