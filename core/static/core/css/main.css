@@ -253,10 +253,11 @@ header hr {
     z-index: 1000;
     max-height: 70vh;
     overflow-y: auto;
+    display: none;
 }
 
-.search-results:empty {
-    display: none;
+li:focus-within .search-results:not(:empty) {
+    display: block;
 }
 
 .search-result a {
