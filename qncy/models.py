@@ -37,16 +37,15 @@ class QuestionManager(models.Manager):
         )
 
     def annotate_votes(self, questions, user):
-        if user.is_authenticated:
-            upvotedSubmissions = QuestionVote.objects.filter(
-                question=OuterRef("pk"), user=user
-            ).values("up")[:1]
-            questions = questions.annotate(
-                user_voted=Exists(
-                    QuestionVote.objects.filter(question=OuterRef("pk"), user=user)
-                ),
-                user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
-            )
+        upvotedSubmissions = QuestionVote.objects.filter(
+            question=OuterRef("pk"), user=user
+        ).values("up")[:1]
+        questions = questions.annotate(
+            user_voted=Exists(
+                QuestionVote.objects.filter(question=OuterRef("pk"), user=user)
+            ),
+            user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
+        )
         return questions
 
     def get_new(self):

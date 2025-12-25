@@ -22,9 +22,10 @@ def register(request):
 
 @login_required
 def settings(request):
-    form = SettingsForm(instance=request.user)
+    user_instance = User.objects.get(pk=request.user.pk)
+    form = SettingsForm(instance=user_instance)
     if request.method == "POST":
-        form = SettingsForm(request.POST, request.FILES, instance=request.user)
+        form = SettingsForm(request.POST, request.FILES, instance=user_instance)
         if form.is_valid():
             form.save()
             return redirect("qncy:index")
