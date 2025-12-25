@@ -1,0 +1,18 @@
+{% load static %}
+
+{% if page_obj %}
+<ul>
+{% for question in page_obj %}
+<li class="search-result">
+    <a href="{% url 'qncy:question' question.id %}">
+        <div class="result-title">{{ question.title }}</div>
+        <div class="result-meta">
+            <span>{{ question.rating }} votes</span>
+            <span>{{ question.answer_count }} answers</span>
+            <span>by {{ question.author.username }}</span>
+        </div>
+    </a>
+</li>
+{% endfor %}
+</ul>
+{% endif %}

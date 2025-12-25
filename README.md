@@ -18,14 +18,8 @@ Useful command: `pre-commit run --all-files`
 
 ## Deployment
 
-If you have Docker installed and are fine with temporarily losing ~1.5gb of
-space, you can deploy a fully working instance of the app by running the
-following command:
+To add mock user data, a management command `fill_db [ratio]` is present.
+Sidebar data can updated using `generate_sidebar`.
 
-```sh
-sh deploy.sh
-```
-
-This will create a docker stack named `vk-web` with a working server
-pre-populated with 25 fake users and mock data.
-Passwords for all users is `demopassword`.
+The project contains many parts (PostgreSQL, Centrifugo, Redis, etc.).
+As such, `docker.sh` is recommended for a quick demo deployment.

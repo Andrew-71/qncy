@@ -1,5 +1,16 @@
 from django.db import models
-from django.db.models import Sum, Case, When, IntegerField, Count
+from django.db.models import (
+    Sum,
+    Case,
+    When,
+    IntegerField,
+    Count,
+    OuterRef,
+    Subquery,
+    Exists,
+    BooleanField,
+)
+from django.urls import reverse
 
 from core.models import User
 
@@ -7,6 +18,9 @@ from core.models import User
 # Tag: ...tag
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True, blank=False)
+
+    def url_name(self):
+        return self.name.replace(" ", "+")
 
     def __str__(self):
         return self.name
@@ -21,6 +35,18 @@ class QuestionManager(models.Manager):
             .annotate(answer_count=Count("answers"))
             .prefetch_related("tags")
         )
+
+    def annotate_votes(self, questions, user):
+        upvotedSubmissions = QuestionVote.objects.filter(
+            question=OuterRef("pk"), user=user
+        ).values("up")[:1]
+        questions = questions.annotate(
+            user_voted=Exists(
+                QuestionVote.objects.filter(question=OuterRef("pk"), user=user)
+            ),
+            user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
+        )
+        return questions
 
     def get_new(self):
         return self.order_by("-created_at")
@@ -84,6 +110,9 @@ class Question(models.Model):
         vote.save()
         self.update_rating()
 
+    def voting_url(self):
+        return reverse("qncy:vote_question", args=[self.id])
+
     def __str__(self):
         return self.title
 
@@ -92,8 +121,22 @@ class AnswerManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().select_related("author")
 
+    def annotate_votes(self, answers, user):
+        upvotedSubmissions = AnswerVote.objects.filter(
+            answer=OuterRef("pk"), user=user
+        ).values("up")[:1]
+        answers = answers.annotate(
+            user_voted=Exists(
+                AnswerVote.objects.filter(answer=OuterRef("pk"), user=user)
+            ),
+            user_vote_up=Subquery(upvotedSubmissions, output_field=BooleanField()),
+        )
+        return answers
+
     def for_question(self, question):
-        return self.filter(question=question).order_by("-accepted", "-rating")
+        return self.filter(question=question).order_by(
+            "-accepted", "-rating", "created_at"
+        )
 
 
 # Answer: content, author, creation date, accepted flag, rating
@@ -154,6 +197,9 @@ class Answer(models.Model):
         vote.save()
         self.update_rating()
         return
+
+    def voting_url(self):
+        return reverse("qncy:vote_answer", args=[self.id])
 
     def __str__(self):
         return self.author.username + " - " + self.question.title

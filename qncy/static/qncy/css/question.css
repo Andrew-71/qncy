@@ -105,3 +105,6 @@
     text-decoration: none;
 }
 
+.accepted {
+    filter: brightness(0) saturate(100%) invert(50%) sepia(17%) saturate(4795%) hue-rotate(225deg) brightness(99%) contrast(93%);
+}

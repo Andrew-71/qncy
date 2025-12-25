@@ -3,7 +3,7 @@
     <p>Popular tags</p>
     <ul class="tags">
     {% for tag in common.top_tags %}
-        <li><a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a></li>
+        <li><a href="{% url 'qncy:tagged' tag.url_name %}">{{ tag.name }}</a></li>
     {% endfor %}
     </ul>
 {% else %}

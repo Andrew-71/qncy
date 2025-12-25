@@ -2,18 +2,14 @@
 {% if page_obj %}
     {% for question in page_obj %}
         <div class="card">
-            <form action="{% url 'qncy:vote_question' question.id %}" method="post">
-                {% csrf_token %}
-                <div class="card-score">{% vote question user %}</div>
-                <input type="hidden" name="next" value="{{ request.path }}">
-            </form>
+            <div class="card-score">{% vote question user %}</div>
             <div class="card-info">
                 <h2 class="card-title"><a href="{% url 'qncy:question' question.id %}">{{ question.title }}</a></h2>
                 <p>{{ question.content | truncatechars:200}}</p>
                 <div class="card-footer">
                     <span>Asked by {% if question.author.pfp %}<img src="{{ question.author.pfp.url }}">{% endif %} <a href="{% url 'qncy:user_profile' question.author.username %}">{{ question.author.username }}</a>. <a href="{% url 'qncy:question' question.id %}">Answer ({{ question.answer_count }})</a></span>
                     {% if question.tags.count %}
-                    <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.name %}">{{ tag.name }}</a> {% endfor %}</span>
+                    <span>Tags: {% for tag in question.tags.all %}<a href="{% url 'qncy:tagged' tag.url_name %}">{{ tag.name }}</a> {% endfor %}</span>
                     {% endif %}
                 </div>
             </div>

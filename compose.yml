@@ -1,25 +1,73 @@
 services:
   web:
     build: .
-    command: python /var/app/manage.py runserver 0.0.0.0:8000
+    command: gunicorn vkhw.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/var/app
-    ports:
-      - 8000:8000
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    expose:
+      - 8000
     depends_on:
       - db
-    environment:
-      - QNCY_DB_BACKEND=postgresql
-      - QNCY_DB_USER=postgres
-      - QNCY_DB_PASSWORD=postgres
-      - QNCY_DB_URI=db
-      - QNCY_DATABASE_PORT=5432
+    env_file:
+      - .env
+
+  nginx:
+    image: nginx:1.25-alpine
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_volume:/app/static
+      - media_volume:/app/media
+    depends_on:
+      - web
+
   db:
-    image: postgres:14
+    image: postgres:14-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - "POSTGRES_HOST_AUTH_METHOD=trust"
+      - POSTGRES_USER=${QNCY_DB_USER}
+      - POSTGRES_PASSWORD=${QNCY_DB_PASSWORD}
+      - POSTGRES_DB=${QNCY_DB_USER}
+    ports:
+      - 5432:5432
+
+  cron:
+    build: .
+    command: /app/scripts/run_cron.sh
+    volumes:
+      - .:/app
+    depends_on:
+      - web
+    env_file:
+      - .env
+  
+  centrifugo:
+    image: centrifugo/centrifugo:v3
+    restart: always
+    command: centrifugo -c /etc/centrifugo/config.json
+    ports:
+      - 8001:8000
+      - 8002:8002
+    volumes:
+      - ./centrifugo/config.json:/etc/centrifugo/config.json:ro
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    expose:
+      - 8001
+
+  redis:
+    image: redis
+    expose:
+      - 6379
 
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:

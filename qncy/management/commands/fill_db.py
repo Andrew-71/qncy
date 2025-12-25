@@ -27,13 +27,14 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE("Starting DB fill..."))
 
         with transaction.atomic():
-            # 1) create users + tags
             user_objs = []
             tag_objs = []
+            user_counter = 0
+            tag_counter = 0
             for _ in range(n_users):
                 u = User(
                     email=fake.email(),
-                    username=fake.user_name() + str(randint(1, 71)),
+                    username=fake.user_name() + str(user_counter),
                     password="demopassword",
                 )
                 # While technically better, this is EXTREMELY slow,
@@ -41,11 +42,11 @@ class Command(BaseCommand):
                 # Demo data shouldn't be secure anyway, right?
                 # u.set_password("demopassword")
                 user_objs.append(u)
+                user_counter += 1
 
-                tag_name = (
-                    " ".join(fake.words(randint(1, 3))) + " " + str(randint(1, 326))
-                )
+                tag_name = " ".join(fake.words(randint(1, 3))) + " " + str(tag_counter)
                 tag_objs.append(Tag(name=tag_name))
+                tag_counter += 1
 
             User.objects.bulk_create(user_objs, batch_size=500)
             Tag.objects.bulk_create(tag_objs, batch_size=1000)
@@ -150,38 +151,44 @@ class Command(BaseCommand):
             )
             qvote_map = {item["question"]: item["rating"] or 0 for item in qvotes_agg}
 
-            answer_sum_by_question = Answer.objects.values("question").annotate(
-                sum_rating=Sum("rating")
-            )
-            ans_sum_map = {
-                item["question"]: item["sum_rating"] or 0
-                for item in answer_sum_by_question
-            }
-
             questions_to_update = []
             for q in questions:
-                q.rating = qvote_map.get(q.id, 0) + ans_sum_map.get(q.id, 0)
+                q.rating = qvote_map.get(q.id, 0)
                 questions_to_update.append(q)
             Question.objects.bulk_update(
                 questions_to_update, ["rating"], batch_size=1000
             )
 
-            q_by_user = Question.objects.values("author").annotate(
-                sum_rating=Sum("rating")
+            qvotes_by_user = QuestionVote.objects.values("question__author").annotate(
+                score=Sum(
+                    Case(
+                        When(up=True, then=Value(1)),
+                        When(up=False, then=Value(-1)),
+                        output_field=IntegerField(),
+                    )
+                )
             )
-            a_by_user = Answer.objects.values("author").annotate(
-                sum_rating=Sum("rating")
+            avotes_by_user = AnswerVote.objects.values("answer__author").annotate(
+                score=Sum(
+                    Case(
+                        When(up=True, then=Value(1)),
+                        When(up=False, then=Value(-1)),
+                        output_field=IntegerField(),
+                    )
+                )
             )
 
             user_rating_map = {}
-            for item in q_by_user:
-                user_rating_map[item["author"]] = user_rating_map.get(
-                    item["author"], 0
-                ) + (item["sum_rating"] or 0)
-            for item in a_by_user:
-                user_rating_map[item["author"]] = user_rating_map.get(
-                    item["author"], 0
-                ) + (item["sum_rating"] or 0)
+            for item in qvotes_by_user:
+                user_id = item["question__author"]
+                user_rating_map[user_id] = user_rating_map.get(user_id, 0) + (
+                    item["score"] or 0
+                )
+            for item in avotes_by_user:
+                user_id = item["answer__author"]
+                user_rating_map[user_id] = user_rating_map.get(user_id, 0) + (
+                    item["score"] or 0
+                )
 
             for u in users:
                 u.rating = user_rating_map.get(u.id, 0)

@@ -1,0 +1,19 @@
+{
+    "port": 8001,
+    "engine": "redis",
+    "redis_address": "redis://redis:6379",
+    "allowed_origins": "http://localhost:8000",
+    "api_key": "centrifugo_api",
+    "proxy_connect_endpoint": "http://web:8000/centrifugo/connect/",
+    "proxy_publish_endpoint": "http://web:8000/centrifugo/publish/",
+    "proxy_subscribe_endpoint": "http://web:8000/centrifugo/subscribe/",
+    "proxy_http_headers": ["Cookie"],
+    "namespaces": [
+        {
+            "name": "questions",
+            "publish": true,
+            "proxy_publish": true,
+            "proxy_subscribe": true
+        }
+    ]
+}
