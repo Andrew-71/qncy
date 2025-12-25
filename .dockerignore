@@ -1,6 +1,7 @@
 .venv
 .vscode
 .gitignore
+.pre-commit-config.yaml
 
 __pycache__
 
