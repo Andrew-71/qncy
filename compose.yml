@@ -45,6 +45,27 @@ services:
       - web
     env_file:
       - .env
+  
+  centrifugo:
+    image: centrifugo/centrifugo:v3
+    restart: always
+    command: centrifugo -c /etc/centrifugo/config.json
+    ports:
+      - 8001:8000
+      - 8002:8002
+    volumes:
+      - ./centrifugo/config.json:/etc/centrifugo/config.json:ro
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    expose:
+      - 8001
+
+  redis:
+    image: redis
+    expose:
+      - 6379
 
 volumes:
   postgres_data:

@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["web", "localhost"]
 CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 
 INSTALLED_APPS = [
@@ -129,3 +129,6 @@ LOGIN_REDIRECT_URL = "/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+CENTRIFUGO_URL = os.environ.get("CENTRIFUGO_URL", "http://centrifugo:8001/api")
+CENTRIFUGO_API_KEY = os.environ.get("CENTRIFUGO_API_KEY", "centrifugo_api")

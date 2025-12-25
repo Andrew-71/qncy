@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from . import centrifugo
 
 app_name = "qncy"
 urlpatterns = [
@@ -15,4 +16,7 @@ urlpatterns = [
     path("vote/a/<int:answer_id>/", views.vote_answer, name="vote_answer"),
     path("accept/a/<int:answer_id>/", views.accept_answer, name="accept_answer"),
     path("search/", views.search, name="search"),
+    path("centrifugo/connect/", centrifugo.connect, name="connect"),
+    path("centrifugo/subscribe/", centrifugo.subscribe, name="subscribe"),
+    path("centrifugo/publish/", centrifugo.publish, name="publish"),
 ]

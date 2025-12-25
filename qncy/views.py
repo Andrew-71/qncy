@@ -9,6 +9,7 @@ from django.db.models import Q
 
 from qncy.models import Question, Tag, Answer
 from qncy.forms import QuestionForm, AnswerForm
+from qncy.centrifugo import publish_server
 
 from core.models import User
 
@@ -89,6 +90,8 @@ def question(request, question_id):
             form = AnswerForm(request.POST, request.FILES, instance=answer)
             if form.is_valid():
                 form.save()
+                channel = f"questions:{question.id}"
+                publish_server(channel)
                 return HttpResponseRedirect(request.path_info)
         context["form"] = form
 

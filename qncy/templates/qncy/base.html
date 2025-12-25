@@ -23,8 +23,7 @@
                     <input name="q" type="text" placeholder="Search"
                         hx-post="{% url 'qncy:search' %}"
                         hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
-                        hx-target="#search-results"
-                        hx-indicator=".htmx-indicator">
+                        hx-target="#search-results">
                     {% csrf_token %}
                 </form>
                 <div id="search-results" class="search-results"></div>
