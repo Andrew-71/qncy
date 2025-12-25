@@ -26,8 +26,9 @@
 
 <h2>Answers: {{ question.answer_count }}</h2>
 
-<div id="answers">{% include "qncy/answer_list.html" %}</div>
-
+<div id="answers"
+    hx-get="{% url 'qncy:question_answers' question.id %}?page={{ page_obj.number }}&pagesize={{ page_obj.paginator.per_page }}"
+    hx-trigger="new-answer">{% include "qncy/answer_list.html" %}</div>
 {% if user.is_authenticated %}
 <form method="post" class="answer-form">
   {% csrf_token %}
@@ -35,5 +36,12 @@
   <button type="submit">Answer!</button>
 </form>
 {% endif %}
+
+<script>
+    // temporary  for new answers
+    setInterval(() => {
+        htmx.trigger("#answers", "new-answer");
+    }, 3000);
+</script>
 
 {% endblock %}

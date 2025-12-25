@@ -95,6 +95,21 @@ def question(request, question_id):
     return render(request, "qncy/question.html", context)
 
 
+def answers(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+
+    answers_list = Answer.objects.for_question(question)
+    page = paginator_page(request, answers_list)
+    if request.user.is_authenticated:
+        page.object_list = Answer.objects.annotate_votes(page.object_list, request.user)
+    context = {
+        "question": question,
+        "page_obj": page,
+    }
+
+    return render(request, "qncy/answer_list.html", context)
+
+
 def tagged(request, tag_name):
     tag_name = tag_name.replace("+", " ")
     tag = get_object_or_404(Tag, name=tag_name)

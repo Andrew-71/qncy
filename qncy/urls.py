@@ -9,6 +9,7 @@ urlpatterns = [
     path("ask", views.ask, name="ask"),
     path("user/<user_name>/", views.by_user, name="user_profile"),
     path("question/<int:question_id>/", views.question, name="question"),
+    path("question/<int:question_id>/answers/", views.answers, name="question_answers"),
     path("tagged/<tag_name>/", views.tagged, name="tagged"),
     path("vote/q/<int:question_id>/", views.vote_question, name="vote_question"),
     path("vote/a/<int:answer_id>/", views.vote_answer, name="vote_answer"),
