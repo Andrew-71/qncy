@@ -90,8 +90,7 @@ def question(request, question_id):
             form = AnswerForm(request.POST, request.FILES, instance=answer)
             if form.is_valid():
                 form.save()
-                channel = f"questions:{question.id}"
-                publish_server(channel)
+                publish_server(f"questions:{question.id}")
                 return HttpResponseRedirect(request.path_info)
         context["form"] = form
 
@@ -183,6 +182,7 @@ def vote_answer(request, answer_id):
 
     context = {"submission": answer, "exists": exists, "up": up}
     html = render_to_string("qncy/voting.html", context, request=request)
+    publish_server(f"questions:{answer.question.id}")
     return HttpResponse(html)
 
 
@@ -207,6 +207,7 @@ def accept_answer(request, answer_id):
         "question": answer.question,
     }
     html = render_to_string("qncy/answer_list.html", context, request=request)
+    publish_server(f"questions:{answer.question.id}")
     return HttpResponse(html)
 
 
