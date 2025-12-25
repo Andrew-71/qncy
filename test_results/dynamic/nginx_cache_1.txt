@@ -1,0 +1,111 @@
+ab -n 1000 -c 20 http://localhost:8000/
+This is ApacheBench, Version 2.3 <$Revision: 1913912 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.25.5
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /
+Document Length:        29997 bytes
+
+Concurrency Level:      20
+Time taken for tests:   47.478 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      30441000 bytes
+HTML transferred:       29997000 bytes
+Requests per second:    21.06 [#/sec] (mean)
+Time per request:       949.565 [ms] (mean)
+Time per request:       47.478 [ms] (mean, across all concurrent requests)
+Transfer rate:          626.13 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       1
+Processing:    55  939  78.8    947     998
+Waiting:       55  939  78.8    947     998
+Total:         56  939  78.8    947     998
+
+Percentage of the requests served within a certain time (ms)
+  50%    947
+  66%    950
+  75%    954
+  80%    956
+  90%    962
+  95%    969
+  98%    981
+  99%    990
+ 100%    998 (longest request)
+
+ ---
+
+ab -n 1000 -c 20 http://localhost:8000/
+This is ApacheBench, Version 2.3 <$Revision: 1913912 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100 requests
+Completed 200 requests
+Completed 300 requests
+Completed 400 requests
+Completed 500 requests
+Completed 600 requests
+Completed 700 requests
+Completed 800 requests
+Completed 900 requests
+Completed 1000 requests
+Finished 1000 requests
+
+
+Server Software:        nginx/1.25.5
+Server Hostname:        localhost
+Server Port:            8000
+
+Document Path:          /
+Document Length:        29997 bytes
+
+Concurrency Level:      20
+Time taken for tests:   48.919 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      30441000 bytes
+HTML transferred:       29997000 bytes
+Requests per second:    20.44 [#/sec] (mean)
+Time per request:       978.372 [ms] (mean)
+Time per request:       48.919 [ms] (mean, across all concurrent requests)
+Transfer rate:          607.69 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       5
+Processing:    51  968  90.7    969    1094
+Waiting:       51  968  90.7    969    1094
+Total:         52  968  90.7    969    1094
+
+Percentage of the requests served within a certain time (ms)
+  50%    969
+  66%    988
+  75%   1001
+  80%   1010
+  90%   1034
+  95%   1056
+  98%   1079
+  99%   1083
+ 100%   1094 (longest request)

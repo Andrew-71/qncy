@@ -1,0 +1,54 @@
+ab -n 5000 -c 50 http://localhost:8081/static/core/css/main.css
+This is ApacheBench, Version 2.3 <$Revision: 1913912 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 500 requests
+Completed 1000 requests
+Completed 1500 requests
+Completed 2000 requests
+Completed 2500 requests
+Completed 3000 requests
+Completed 3500 requests
+Completed 4000 requests
+Completed 4500 requests
+Completed 5000 requests
+Finished 5000 requests
+
+
+Server Software:        gunicorn
+Server Hostname:        localhost
+Server Port:            8081
+
+Document Path:          /static/core/css/main.css
+Document Length:        6048 bytes
+
+Concurrency Level:      50
+Time taken for tests:   4.438 seconds
+Complete requests:      5000
+Failed requests:        0
+Total transferred:      32050000 bytes
+HTML transferred:       30240000 bytes
+Requests per second:    1126.61 [#/sec] (mean)
+Time per request:       44.381 [ms] (mean)
+Time per request:       0.888 [ms] (mean, across all concurrent requests)
+Transfer rate:          7052.30 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       3
+Processing:     5   44   3.1     44      55
+Waiting:        4   44   3.1     44      55
+Total:          6   44   3.1     44      55
+
+Percentage of the requests served within a certain time (ms)
+  50%     44
+  66%     45
+  75%     45
+  80%     45
+  90%     47
+  95%     49
+  98%     51
+  99%     51
+ 100%     55 (longest request)
