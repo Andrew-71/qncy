@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 from django.db.models import (
     Sum,
@@ -11,12 +13,26 @@ from django.db.models import (
     BooleanField,
 )
 from django.urls import reverse
+from django.contrib.postgres.search import SearchVector
+from django.utils import timezone
 
 from core.models import User
 
 
+class TagManager(models.Manager):
+    def get_top(self):
+        three_weeks_ago = timezone.now() - timedelta(days=21)
+        return (
+            self.filter(question__created_at__gte=three_weeks_ago)
+            .annotate(q_count=Count("question"))
+            .order_by("-q_count", "name")[:10]
+        )
+
+
 # Tag: ...tag
 class Tag(models.Model):
+    objects = TagManager()
+
     name = models.CharField(max_length=50, unique=True, blank=False)
 
     def url_name(self):
@@ -60,6 +76,11 @@ class QuestionManager(models.Manager):
 
     def get_by(self, user):
         return self.filter(author=user).order_by("-created_at")
+
+    def search(self, query):
+        return self.annotate(
+            search=SearchVector("content", "title"),
+        ).filter(search=query)
 
 
 # Question: title, content, author, creation date, tags, rating
