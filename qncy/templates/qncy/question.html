@@ -45,7 +45,7 @@
     centrifuge.on('disconnect', function (ctx) { console.log("disconnected", ctx); });
 
     const sub = centrifuge.subscribe("questions:{{ question.id }}",
-        function (ctx) { htmx.trigger("#answers", "new-answer"); console.log("new thing"); });
+        function (ctx) { htmx.trigger("#answers", "new-answer"); });
 
     centrifuge.connect();
 </script>

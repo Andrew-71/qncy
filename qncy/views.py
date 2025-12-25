@@ -156,7 +156,7 @@ def vote_question(request, question_id):
         exists = True
         up = False
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Type of vote not specified.")
     context = {"submission": question, "exists": exists, "up": up}
     html = render_to_string("qncy/voting.html", context, request=request)
     return HttpResponse(html)
@@ -178,7 +178,7 @@ def vote_answer(request, answer_id):
         exists = True
         up = False
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Type of vote not specified.")
 
     context = {"submission": answer, "exists": exists, "up": up}
     html = render_to_string("qncy/voting.html", context, request=request)
@@ -191,13 +191,13 @@ def vote_answer(request, answer_id):
 def accept_answer(request, answer_id):
     answer = get_object_or_404(Answer, id=answer_id)
     if request.user != answer.question.author:
-        raise PermissionDenied()
+        raise PermissionDenied("Only question owner can accept answers.")
     if request.POST.get("clear") is not None:
         answer.clear_accept()
     elif request.POST.get("accept") is not None:
         answer.accept()
     else:
-        return HttpResponseBadRequest()
+        return HttpResponseBadRequest("Type of acceptance not specified.")
 
     answers_list = Answer.objects.for_question(answer.question)
     page = paginator_page(request, answers_list)
