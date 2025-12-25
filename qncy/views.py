@@ -5,7 +5,6 @@ from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.core.exceptions import PermissionDenied
-from django.db.models import Q
 
 from qncy.models import Question, Tag, Answer
 from qncy.forms import QuestionForm, AnswerForm
@@ -215,9 +214,7 @@ def accept_answer(request, answer_id):
 def search(request):
     query = request.POST.get("q", "")
     if query:
-        results = Question.objects.filter(
-            Q(title__icontains=query) | Q(content__icontains=query)
-        ).distinct()
+        results = Question.objects.search(query)
     else:
         results = Question.objects.none()
     page = paginator_page(request, results)

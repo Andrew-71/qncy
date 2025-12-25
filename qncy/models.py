@@ -11,6 +11,7 @@ from django.db.models import (
     BooleanField,
 )
 from django.urls import reverse
+from django.contrib.postgres.search import SearchVector
 
 from core.models import User
 
@@ -60,6 +61,11 @@ class QuestionManager(models.Manager):
 
     def get_by(self, user):
         return self.filter(author=user).order_by("-created_at")
+
+    def search(self, query):
+        return self.annotate(
+            search=SearchVector("content", "title"),
+        ).filter(search=query)
 
 
 # Question: title, content, author, creation date, tags, rating
