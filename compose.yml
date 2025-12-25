@@ -1,8 +1,9 @@
 services:
   web:
     build: .
-    command: gunicorn vkhw.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn vkhw.wsgi:application -c /etc/gunicorn/config.conf.py
     volumes:
+      - ./config/gunicorn.conf.py:/etc/gunicorn/config.conf.py:ro
       - .:/app
       - static_volume:/app/static
       - media_volume:/app/media
@@ -19,7 +20,7 @@ services:
     ports:
       - 8000:80
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - static_volume:/app/static
       - media_volume:/app/media
     depends_on:
